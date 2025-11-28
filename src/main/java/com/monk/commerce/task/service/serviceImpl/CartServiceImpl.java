@@ -6,6 +6,7 @@ import com.monk.commerce.task.dto.response.AppliedCouponResponseDTO;
 import com.monk.commerce.task.entity.Coupon;
 import com.monk.commerce.task.exception.CouponNotApplicableException;
 import com.monk.commerce.task.exception.CouponNotFoundException;
+import com.monk.commerce.task.exception.InvalidCartException;
 import com.monk.commerce.task.factory.CouponStrategyFactory;
 import com.monk.commerce.task.repository.CouponRepository;
 import com.monk.commerce.task.service.CartService;
@@ -22,7 +23,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -49,23 +52,25 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<ApplicableCouponResponseDTO> getApplicableCoupons(CartRequestDTO cart) {
-        log.debug("Received request to fetch applicable coupons");
-        Objects.requireNonNull(cart, "Cart cannot be null");
-        cartValidator.validateCartRequest(cart);
+    public Map<String, List<ApplicableCouponResponseDTO>> getApplicableCoupons(Map<String, CartRequestDTO> request) {
+        log.info("Received request to fetch applicable coupons");
+        Objects.requireNonNull(request, "Request cannot be null");
+        CartRequestDTO cart = request.get("cart");
+        if (Objects.isNull(cart)) {
+            throw new InvalidCartException("Cart data not found in request");
+        }
 
+        cartValidator.validateCartRequest(cart);
         log.info("Finding applicable coupons for cart with {} items", cart.getItems().size());
         try {
-            // Get all valid coupons
             List<Coupon> validCoupons = couponRepository.findAllValidCoupons(LocalDateTime.now());
-            
             if (Objects.isNull(validCoupons)) {
                 log.warn("Repository returned null for valid coupons");
-                return new ArrayList<>();
+                Map<String, List<ApplicableCouponResponseDTO>> emptyResponse = new HashMap<>();
+                emptyResponse.put("applicable_coupons", new ArrayList<>());
+                return emptyResponse;
             }
-
             log.info("Found {} valid coupons", validCoupons.size());
-            // Filter and calculate discount for applicable coupons
             List<ApplicableCouponResponseDTO> applicableCoupons = validCoupons.stream()
                     .filter(coupon -> {
                         try {
@@ -80,7 +85,6 @@ public class CartServiceImpl implements CartService {
                         try {
                             CouponStrategy strategy = strategyFactory.getStrategy(coupon.getType());
                             BigDecimal discount = strategy.calculateDiscount(coupon, cart);
-
                             return ApplicableCouponResponseDTO.builder()
                                     .couponId(coupon.getId())
                                     .type(coupon.getType().getValue())
@@ -95,7 +99,9 @@ public class CartServiceImpl implements CartService {
                     .sorted(Comparator.comparing(ApplicableCouponResponseDTO::getDiscount).reversed())
                     .collect(Collectors.toList());
             log.info("Found {} applicable coupons", applicableCoupons.size());
-            return applicableCoupons;
+            Map<String, List<ApplicableCouponResponseDTO>> response = new HashMap<>();
+            response.put("applicable_coupons", applicableCoupons);
+            return response;
         } catch (Exception e) {
             log.error("Error while finding applicable coupons", e);
             throw new RuntimeException("Failed to fetch applicable coupons: " + e.getMessage(), e);
@@ -103,27 +109,26 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public AppliedCouponResponseDTO applyCoupon(Long couponId, CartRequestDTO cart) {
-        log.debug("Received request to apply coupon {} to cart", couponId);
+    public AppliedCouponResponseDTO applyCoupon(Long couponId, Map<String, CartRequestDTO> request) {
+        log.info("Received request to apply coupon {} to cart", couponId);
         couponValidator.validateCouponId(couponId);
-        Objects.requireNonNull(cart, "Cart cannot be null");
-        cartValidator.validateCartRequest(cart);
+        Objects.requireNonNull(request, "Request cannot be null");
+        CartRequestDTO cart = request.get("cart");
+        if (Objects.isNull(cart)) {
+            throw new InvalidCartException("Cart data not found in request");
+        }
 
+        cartValidator.validateCartRequest(cart);
         log.info("Applying coupon {} to cart with {} items", couponId, cart.getItems().size());
         try {
-            // Find coupon
             Coupon coupon = couponRepository.findById(couponId)
                     .orElseThrow(() -> new CouponNotFoundException(String.format(Constants.COUPON_NOT_FOUND, couponId)));
-            // Validate coupon
             couponValidator.validateCouponValid(coupon);
-            // Get appropriate strategy
             CouponStrategy strategy = strategyFactory.getStrategy(coupon.getType());
             Objects.requireNonNull(strategy, "Coupon strategy cannot be null");
-            // Check if coupon is applicable
             if (!strategy.isApplicable(coupon, cart)) {
                 throw new CouponNotApplicableException(Constants.COUPON_NOT_APPLICABLE + " (Coupon ID: " + couponId + ")");
             }
-            // Apply coupon and get updated cart
             AppliedCouponResponseDTO response = strategy.applyCoupon(coupon, cart);
             Objects.requireNonNull(response, "Applied coupon response cannot be null");
             log.info("Successfully applied coupon {} with discount: {}", couponId, response.getUpdatedCart().getTotalDiscount());
