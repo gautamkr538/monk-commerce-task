@@ -26,12 +26,18 @@ public class CartController {
         this.cartService = cartService;
     }
 
+    /**
+     * Get all applicable coupons for a cart
+     */
     @PostMapping("/applicable-coupons")
     @Operation(summary = "Get applicable coupons", description = "Fetch all applicable coupons for a given cart and calculate discounts")
     public ResponseEntity<Map<String, List<ApplicableCouponResponseDTO>>> getApplicableCoupons(@Valid @RequestBody Map<String, CartRequestDTO> request) {
         return ResponseEntity.ok(cartService.getApplicableCoupons(request));
     }
 
+    /**
+     * Apply a specific coupon to a cart
+     */
     @PostMapping("/apply-coupon/{id}")
     @Operation(summary = "Apply coupon to cart", description = "Apply a specific coupon to the cart and return updated cart with discounts")
     public ResponseEntity<AppliedCouponResponseDTO> applyCoupon(@Parameter(description = "Coupon ID", required = true) @PathVariable Long id,
