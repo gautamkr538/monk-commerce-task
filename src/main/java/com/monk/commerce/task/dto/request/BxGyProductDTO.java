@@ -14,7 +14,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BxGyProductDTO {
-    
+
+    // Used JsonProperty to match the expected JSON field names with underscores
+    // Added validation annotations to ensure data integrity
+    // Product ID must not be null
+    // Quantity must be at least 1
+
     @NotNull(message = Constants.PRODUCT_ID_REQUIRED)
     @JsonProperty("product_id")
     private Long productId;

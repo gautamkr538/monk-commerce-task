@@ -17,7 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BxGyDetailsDTO {
-    
+
+    // Used JSON property names with underscores to match expected input format
+    // Added validation annotations to ensure data integrity
+    // Lists of products for "buy" and "get" sections must not be empty
+    // Repetition limit must be at least 1
+
     @Valid
     @NotEmpty(message = "Buy products list cannot be empty")
     @JsonProperty("buy_products")

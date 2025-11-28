@@ -16,7 +16,13 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartItemDTO {
-    
+
+    // Used JsonProperty to match the expected JSON field names with underscores
+    // Added validation annotations to ensure data integrity
+    // Product ID must not be null
+    // Quantity must be at least 1
+    // Price must be non-negative
+
     @NotNull(message = Constants.PRODUCT_ID_REQUIRED)
     @JsonProperty("product_id")
     private Long productId;

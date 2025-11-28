@@ -17,6 +17,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductWiseDetailsDTO {
+
+    // Used JsonProperty to match the expected JSON field names with underscores
+    // Added validation annotations to ensure data integrity
+    // Product ID must not be null
+    // Discount percentage must be between 0 and 100
     
     @NotNull(message = Constants.PRODUCT_ID_REQUIRED)
     @JsonProperty("product_id")

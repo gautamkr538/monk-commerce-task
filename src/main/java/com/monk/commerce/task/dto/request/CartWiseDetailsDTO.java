@@ -16,7 +16,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartWiseDetailsDTO {
-    
+
+    // Used JsonProperty to match the expected JSON field names with underscores
+    // Added validation annotations to ensure data integrity
+    // Threshold must be non-negative
+    // Discount percentage must be between 0 and 100
+
     @Min(value = 0, message = "Threshold must be positive")
     private BigDecimal threshold;
     

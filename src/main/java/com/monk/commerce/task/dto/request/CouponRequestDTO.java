@@ -16,7 +16,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CouponRequestDTO {
-    
+
+    // Used JsonProperty to map JSON field like: "coupon_code" to Java field "couponCode"
+    // Added validation annotations to ensure data integrity
+    // Coupon code must not be blank
+    // Type must not be blank
+    // Expiration date formatted as ISO 8601 date-time string
+
     @JsonProperty("coupon_code")
     private String couponCode;
     

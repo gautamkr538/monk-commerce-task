@@ -14,7 +14,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CartRequestDTO {
-    
+
+    // List of cart items with validation to ensure it's not empty
+
     @Valid
     @NotEmpty(message = "Cart items cannot be empty")
     private List<CartItemDTO> items;
