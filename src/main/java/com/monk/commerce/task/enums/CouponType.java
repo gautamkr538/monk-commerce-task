@@ -1,5 +1,8 @@
 package com.monk.commerce.task.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum CouponType {
     CART_WISE("cart-wise"),
     PRODUCT_WISE("product-wise"),
@@ -9,10 +12,6 @@ public enum CouponType {
 
     CouponType(String value) {
         this.value = value;
-    }
-
-    public String getValue() {
-        return value;
     }
 
     public static CouponType fromValue(String value) {
