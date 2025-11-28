@@ -14,6 +14,6 @@ public class SwaggerConfig {
                 .info(new Info()
                         .title("Monk Commerce - Coupon Management API")
                         .version("1.0.0")
-                        .description("RESTful API for managing and applying discount coupons for an monk-commerce platform"));
+                        .description("RESTful API for managing and applying discount coupons for the monk-commerce platform"));
     }
 }
