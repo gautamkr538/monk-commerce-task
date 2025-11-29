@@ -63,7 +63,7 @@ The coupon engine uses **JOINED strategy** to map:
 
 Indexes added for performance and optimized search.
 
-The full PostgreSQL schema used by the coupon engine: **[View schema.sql](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/schema.sql)**
+The full PostgreSQL schema used by the coupon engine: **[View Schema.sql](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/schema.sql)**
 
 ---
 
@@ -259,4 +259,4 @@ This will make DTO ↔ Entity mapping maintainable & cleaner.
 
 # Postman Collection
 
-A complete Postman collection is included for testing all coupon scenarios: **[Download Postman Collection](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/postman_collection.json)**
+A complete Postman collection is included for testing all coupon scenarios: **[View Postman Collection](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/postman_collection.json)**
