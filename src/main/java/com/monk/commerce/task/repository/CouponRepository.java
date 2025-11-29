@@ -15,27 +15,26 @@ import java.util.UUID;
 @Repository
 public interface CouponRepository extends JpaRepository<Coupon, UUID> {
 
-    @Query(value = "SELECT EXISTS(SELECT 1 FROM coupon WHERE coupon_code = :couponCode AND is_active = true)", nativeQuery = true)
+    @Query("SELECT CASE WHEN COUNT(c) > 0 THEN true ELSE false END FROM Coupon c WHERE c.couponCode = :couponCode AND c.isActive = true")
     boolean existsActiveByCouponCode(@Param("couponCode") String couponCode);
 
-    @Query(value = "SELECT * FROM coupon WHERE id = :id AND is_active = true", nativeQuery = true)
+    @Query("SELECT c FROM Coupon c WHERE c.id = :id AND c.isActive = true")
     Optional<Coupon> findActiveById(@Param("id") UUID id);
 
-    @Query(value = "SELECT * FROM coupon WHERE is_active = true ORDER BY created_at DESC", nativeQuery = true)
+    @Query("SELECT c FROM Coupon c WHERE c.isActive = true ORDER BY c.createdAt DESC")
     List<Coupon> findAllActiveCoupons();
 
-    @Query(value = "SELECT * FROM coupon " +
-            "WHERE is_active = true " +
-            "AND (expiration_date IS NULL OR expiration_date > :currentDate) " +
-            "AND (max_usage_limit IS NULL OR usage_count < max_usage_limit) " +
-            "ORDER BY priority DESC, created_at DESC", nativeQuery = true)
+    @Query("SELECT c FROM Coupon c WHERE c.isActive = true " +
+            "AND (c.expirationDate IS NULL OR c.expirationDate > :currentDate) " +
+            "AND (c.maxUsageLimit IS NULL OR c.usageCount < c.maxUsageLimit) " +
+            "ORDER BY c.priority DESC, c.createdAt DESC")
     List<Coupon> findAllValidCoupons(@Param("currentDate") LocalDateTime currentDate);
 
     @Modifying
-    @Query(value = "UPDATE coupon SET is_active = false, updated_at = :updatedAt WHERE id = :id AND is_active = true", nativeQuery = true)
+    @Query("UPDATE Coupon c SET c.isActive = false, c.updatedAt = :updatedAt WHERE c.id = :id AND c.isActive = true")
     int softDeleteById(@Param("id") UUID id, @Param("updatedAt") LocalDateTime updatedAt);
 
     @Modifying
-    @Query(value = "UPDATE coupon SET usage_count = usage_count + 1, updated_at = :updatedAt WHERE id = :id", nativeQuery = true)
+    @Query("UPDATE Coupon c SET c.usageCount = c.usageCount + 1, c.updatedAt = :updatedAt WHERE c.id = :id")
     void incrementUsageCount(@Param("id") UUID id, @Param("updatedAt") LocalDateTime updatedAt);
 }
