@@ -1,4 +1,4 @@
-# Monk Commerce – Coupon Management API
+# Monk Commerce – Coupon Management API's
 
 A backend assignment implementing a fully extensible **Coupon Engine** supporting **Cart-Wise**, **Product-Wise**, and **BxGy (“Buy X Get Y”)** discounts with real-world scenarios like usage limits, priority system, stacking flags, excluded products, tiered BxGy, and more.
 
