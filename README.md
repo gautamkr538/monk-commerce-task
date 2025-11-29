@@ -232,7 +232,6 @@ The full **scenario coverage table** (100+ scenarios) is included inside this RE
 
 #### 1. Multi-Coupon Stacking Engine
 Apply multiple eligible coupons at once:
-\
 - Apply in priority order
 - Combine discounts carefully
 - Prevent conflicts with non-stackable coupons
@@ -253,7 +252,6 @@ Apply multiple eligible coupons at once:
 
 #### 6. Mapping Optimization (Dozer/MapStruct)
 We can eliminate mapping boilerplate using:
-
 - **Dozer**
 - **MapStruct**
 - Or a custom **DozerUtil**
