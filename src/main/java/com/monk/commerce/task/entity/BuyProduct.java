@@ -1,22 +1,12 @@
 package com.monk.commerce.task.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Objects;
+import java.util.UUID;
 
 @Entity
 @Table(name = "buy_product")
@@ -27,8 +17,8 @@ import java.util.Objects;
 public class BuyProduct {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "bxgy_coupon_id", nullable = false)
@@ -40,27 +30,11 @@ public class BuyProduct {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @Column(name = "tier_level", nullable = false)
+    private Integer tierLevel = 1;
+
     @PrePersist
-    @PreUpdate
-    private void validate() {
-        Objects.requireNonNull(productId, "Product ID cannot be null");
-        Objects.requireNonNull(quantity, "Quantity cannot be null");
-        
-        if (quantity <= 0) {
-            throw new IllegalArgumentException("Quantity must be positive");
-        }
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BuyProduct that = (BuyProduct) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
+    protected void onCreate() {
+        if (tierLevel == null) tierLevel = 1;
     }
 }

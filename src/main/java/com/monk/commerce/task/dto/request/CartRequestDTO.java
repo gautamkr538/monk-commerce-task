@@ -1,5 +1,6 @@
 package com.monk.commerce.task.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -15,9 +16,10 @@ import java.util.List;
 @AllArgsConstructor
 public class CartRequestDTO {
 
-    // List of cart items with validation to ensure it's not empty
-
     @Valid
     @NotEmpty(message = "Cart items cannot be empty")
     private List<CartItemDTO> items;
+
+    @JsonProperty("user_id")
+    private String userId;
 }

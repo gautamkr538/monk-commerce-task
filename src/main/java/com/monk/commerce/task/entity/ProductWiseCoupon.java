@@ -1,9 +1,6 @@
 package com.monk.commerce.task.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.PrimaryKeyJoinColumn;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,5 +27,4 @@ public class ProductWiseCoupon extends Coupon {
 
     @Column(name = "max_discount_per_product", precision = 10, scale = 2)
     private BigDecimal maxDiscountPerProduct;
-
 }

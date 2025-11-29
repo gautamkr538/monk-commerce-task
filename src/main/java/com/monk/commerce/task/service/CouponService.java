@@ -1,35 +1,20 @@
 package com.monk.commerce.task.service;
 
-
 import com.monk.commerce.task.dto.request.CouponRequestDTO;
 import com.monk.commerce.task.dto.response.CouponResponseDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface CouponService {
 
-    /**
-     * Create a new coupon
-     */
     CouponResponseDTO createCoupon(CouponRequestDTO request);
 
-    /**
-     * Get all coupons
-     */
     List<CouponResponseDTO> getAllCoupons();
 
-    /**
-     * Get coupon by ID
-     */
-    CouponResponseDTO getCouponById(Long id);
+    CouponResponseDTO getCouponById(UUID id);
 
-    /**
-     * Update coupon by ID
-     */
-    CouponResponseDTO updateCoupon(Long id, CouponRequestDTO request);
+    CouponResponseDTO updateCoupon(UUID id, CouponRequestDTO request);
 
-    /**
-     * Delete coupon by ID
-     */
-    void deleteCoupon(Long id);
+    void deleteCoupon(UUID id);
 }

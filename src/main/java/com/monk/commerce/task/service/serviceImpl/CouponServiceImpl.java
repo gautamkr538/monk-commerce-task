@@ -9,14 +9,17 @@ import com.monk.commerce.task.mapper.CouponMapper;
 import com.monk.commerce.task.repository.CouponRepository;
 import com.monk.commerce.task.service.CouponService;
 import com.monk.commerce.task.util.Constants;
+import com.monk.commerce.task.util.CouponUtil;
 import com.monk.commerce.task.validator.CouponValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,130 +43,82 @@ public class CouponServiceImpl implements CouponService {
 
     @Override
     public CouponResponseDTO createCoupon(CouponRequestDTO request) {
-        log.debug("Received request to create coupon of type: {}", request.getType());
+        log.debug("Creating coupon with type: {}", request.getType());
         Objects.requireNonNull(request, "Coupon request cannot be null");
-        
-        log.info("Creating new coupon of type: {}", request.getType());
-        try {
-            // Check if coupon code already exists
-            if (Objects.nonNull(request.getCouponCode()) && 
-                couponRepository.existsByCouponCode(request.getCouponCode())) {
-                throw new InvalidCouponException("Coupon code already exists: " + request.getCouponCode());
-            }
-            // Map DTO to entity
-            Coupon coupon = couponMapper.toEntity(request);
-            Objects.requireNonNull(coupon, "Mapped coupon entity cannot be null");
-            // Save coupon
-            Coupon savedCoupon = couponRepository.save(coupon);
-            log.info("Successfully created coupon with ID: {}", savedCoupon.getId());
-            // Map to response DTO
-            return couponMapper.toResponseDTO(savedCoupon);
-        } catch (InvalidCouponException e) {
-            log.error("Failed to create coupon: {}", e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error while creating coupon", e);
-            throw new InvalidCouponException("Failed to create coupon: " + e.getMessage(), e);
+        String couponCode = request.getCouponCode() != null ?
+                request.getCouponCode() : CouponUtil.generateCouponCode();
+        log.debug("Using coupon code: {}", couponCode);
+        if (couponRepository.existsActiveByCouponCode(couponCode)) {
+            log.warn("Coupon code already exists: {}", couponCode);
+            throw new InvalidCouponException("Coupon code already exists: " + couponCode);
         }
+        Coupon coupon = couponMapper.toEntity(request);
+        Coupon savedCoupon = couponRepository.save(coupon);
+        log.info("Created coupon: {} with code: {}", savedCoupon.getId(), savedCoupon.getCouponCode());
+        return couponMapper.toResponseDTO(savedCoupon);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<CouponResponseDTO> getAllCoupons() {
-        log.debug("Received request to fetch all coupons");
-
-        log.info("Fetching all coupons");
-        try {
-            List<Coupon> coupons = couponRepository.findAll();
-            if (Objects.isNull(coupons)) {
-                log.error("Repository returned null for findAll()");
-                throw new IllegalStateException("Failed to fetch coupons");
-            }
-            log.info("Found {} coupons", coupons.size());
-            return coupons.stream().map(couponMapper::toResponseDTO).collect(Collectors.toList());
-        } catch (Exception e) {
-            log.error("Error while fetching all coupons", e);
-            throw new RuntimeException("Failed to fetch coupons: " + e.getMessage(), e);
+        log.debug("Fetching all active coupons");
+        List<Coupon> coupons = couponRepository.findAllActiveCoupons();
+        if (coupons == null) {
+            log.error("Repository returned null for active coupons");
+            throw new IllegalStateException("Failed to fetch coupons");
         }
+        log.info("Found {} active coupons", coupons.size());
+        return coupons.stream()
+                .map(couponMapper::toResponseDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
     @Transactional(readOnly = true)
-    public CouponResponseDTO getCouponById(Long id) {
-        log.debug("Received request to fetch coupon with ID: {}", id);
+    public CouponResponseDTO getCouponById(UUID id) {
+        log.debug("Fetching coupon by ID: {}", id);
         couponValidator.validateCouponId(id);
-        
-        log.info("Fetching coupon with ID: {}", id);
-        try {
-            Coupon coupon = couponRepository.findById(id)
-                    .orElseThrow(() -> new CouponNotFoundException(String.format(Constants.COUPON_NOT_FOUND, id)));
-            log.info("Found coupon with ID: {}", id);
-            return couponMapper.toResponseDTO(coupon);
-        } catch (CouponNotFoundException e) {
-            log.error("Coupon not found with ID: {}", id);
-            throw e;
-        } catch (Exception e) {
-            log.error("Error while fetching coupon with ID: {}", id, e);
-            throw new RuntimeException("Failed to fetch coupon: " + e.getMessage(), e);
-        }
+        Coupon coupon = couponRepository.findActiveById(id)
+                .orElseThrow(() -> {
+                    log.warn("Coupon not found with ID: {}", id);
+                    return new CouponNotFoundException(String.format(Constants.COUPON_NOT_FOUND, id));
+                });
+        log.debug("Found coupon: {} with code: {}", id, coupon.getCouponCode());
+        return couponMapper.toResponseDTO(coupon);
     }
 
     @Override
-    public CouponResponseDTO updateCoupon(Long id, CouponRequestDTO request) {
-        log.debug("Received request to update coupon with ID: {}", id);
+    public CouponResponseDTO updateCoupon(UUID id, CouponRequestDTO request) {
+        log.debug("Updating coupon with ID: {}", id);
         couponValidator.validateCouponId(id);
         Objects.requireNonNull(request, "Coupon request cannot be null");
-
-        log.info("Updating coupon with ID: {}", id);
-        try {
-            // Find existing coupon
-            Coupon existingCoupon = couponRepository.findById(id)
-                    .orElseThrow(() -> new CouponNotFoundException(String.format(Constants.COUPON_NOT_FOUND, id)));
-
-            // Check if updating coupon code and it already exists
-            if (Objects.nonNull(request.getCouponCode()) && 
+        Coupon existingCoupon = couponRepository.findActiveById(id)
+                .orElseThrow(() -> {
+                    log.warn("Coupon not found for update: {}", id);
+                    return new CouponNotFoundException(String.format(Constants.COUPON_NOT_FOUND, id));
+                });
+        if (request.getCouponCode() != null &&
                 !request.getCouponCode().equals(existingCoupon.getCouponCode()) &&
-                couponRepository.existsByCouponCode(request.getCouponCode())) {
-                throw new InvalidCouponException("Coupon code already exists: " + request.getCouponCode());
-            }
-
-            // Update entity
-            couponMapper.updateEntity(existingCoupon, request);
-
-            // Save updated coupon
-            Coupon updatedCoupon = couponRepository.save(existingCoupon);
-            log.info("Successfully updated coupon with ID: {}", id);
-            return couponMapper.toResponseDTO(updatedCoupon);
-        } catch (CouponNotFoundException | InvalidCouponException e) {
-            log.error("Failed to update coupon with ID {}: {}", id, e.getMessage());
-            throw e;
-        } catch (Exception e) {
-            log.error("Unexpected error while updating coupon with ID: {}", id, e);
-            throw new RuntimeException("Failed to update coupon: " + e.getMessage(), e);
+                couponRepository.existsActiveByCouponCode(request.getCouponCode())) {
+            log.warn("Duplicate coupon code during update: {}", request.getCouponCode());
+            throw new InvalidCouponException("Coupon code already exists: " + request.getCouponCode());
         }
+        log.debug("Applying updates to coupon: {}", id);
+        couponMapper.updateEntity(existingCoupon, request);
+        Coupon updatedCoupon = couponRepository.save(existingCoupon);
+        log.info("Updated coupon: {} with code: {}", id, updatedCoupon.getCouponCode());
+        return couponMapper.toResponseDTO(updatedCoupon);
     }
 
     @Override
-    public void deleteCoupon(Long id) {
-        log.debug("Received request to delete coupon with ID: {}", id);
+    public void deleteCoupon(UUID id) {
+        log.debug("Soft deleting coupon with ID: {}", id);
         couponValidator.validateCouponId(id);
-
-        log.info("Deleting coupon with ID: {}", id);
-        try {
-            // Check if coupon exists
-            if (!couponRepository.existsById(id)) {
-                throw new CouponNotFoundException(String.format(Constants.COUPON_NOT_FOUND, id));
-            }
-
-            // Delete coupon
-            couponRepository.deleteById(id);
-            log.info("Successfully deleted coupon with ID: {}", id);
-        } catch (CouponNotFoundException e) {
-            log.error("Coupon not found with ID: {}", id);
-            throw e;
-        } catch (Exception e) {
-            log.error("Error while deleting coupon with ID: {}", id, e);
-            throw new RuntimeException("Failed to delete coupon: " + e.getMessage(), e);
+        int rowsAffected = couponRepository.softDeleteById(id, LocalDateTime.now());
+        if (rowsAffected == 0) {
+            log.warn("Coupon not found for deletion: {}", id);
+            throw new CouponNotFoundException(String.format(Constants.COUPON_NOT_FOUND, id));
         }
+        log.info("Soft deleted coupon: {}", id);
     }
 }

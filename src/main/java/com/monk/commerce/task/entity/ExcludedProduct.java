@@ -9,32 +9,21 @@ import lombok.NoArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table(name = "get_product")
+@Table(name = "excluded_product")
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class GetProduct {
+public class ExcludedProduct {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bxgy_coupon_id", nullable = false)
-    private BxGyCoupon bxgyCoupon;
+    @JoinColumn(name = "coupon_id", nullable = false)
+    private Coupon coupon;
 
     @Column(name = "product_id", nullable = false)
     private Long productId;
-
-    @Column(name = "quantity", nullable = false)
-    private Integer quantity;
-
-    @Column(name = "tier_level", nullable = false)
-    private Integer tierLevel = 1;
-
-    @PrePersist
-    protected void onCreate() {
-        if (tierLevel == null) tierLevel = 1;
-    }
 }

@@ -26,9 +26,6 @@ public class CouponStrategyFactory {
         this.bxGyCouponStrategy = bxGyCouponStrategy;
     }
 
-    /**
-     * Get appropriate strategy based on coupon type
-     */
     public CouponStrategy getStrategy(CouponType couponType) {
         Objects.requireNonNull(couponType, "Coupon type cannot be null");
 
