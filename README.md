@@ -10,7 +10,7 @@ I also documented all implemented and unimplemented scenarios as required.
 
 # 🖼 Architecture Diagram
 
-<img width="2345" height="1706" alt="architecture" src="architecture.png" />
+<img width="2345" height="1706" alt="architecture" src="https://github.com/user-attachments/assets/528db94c-7275-445c-9929-10b84261e53b" />
 
 ---
 
@@ -53,7 +53,7 @@ src/main/java/com/monk/commerce/task
 
 # 🗂 Database Schema (Implemented)
 
-![img_2.png](img_2.png)
+<img width="2741" height="1946" alt="schema_architecture" src="https://github.com/user-attachments/assets/ba4ade04-f150-4729-9d05-3aa5e8025d57" />
 
 ---
 
