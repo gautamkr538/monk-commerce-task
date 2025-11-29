@@ -213,7 +213,7 @@ The full **scenario coverage table** (100+ scenarios) is included inside this RE
 
 # Complete Scenario Coverage Summary
 
-### <u>Fully Implemented Areas</u>
+### <span style="text-decoration: underline;">Fully Implemented Areas</span>
 
 1. Cart-wise coupons
 2. Product-wise coupons
