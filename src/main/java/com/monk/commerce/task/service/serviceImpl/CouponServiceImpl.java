@@ -45,8 +45,7 @@ public class CouponServiceImpl implements CouponService {
     public CouponResponseDTO createCoupon(CouponRequestDTO request) {
         log.debug("Creating coupon with type: {}", request.getType());
         Objects.requireNonNull(request, "Coupon request cannot be null");
-        String couponCode = request.getCouponCode() != null ?
-                request.getCouponCode() : CouponUtil.generateCouponCode();
+        String couponCode = request.getCouponCode() != null ? request.getCouponCode() : CouponUtil.generateCouponCode();
         log.debug("Using coupon code: {}", couponCode);
         if (couponRepository.existsActiveByCouponCode(couponCode)) {
             log.warn("Coupon code already exists: {}", couponCode);
