@@ -8,7 +8,7 @@ Technology Stack: **Java 21**, **Spring Boot 3**, **PostgreSQL**, **Hibernate**,
 
 # 🖼 Architecture Diagram
 
-<img width="2345" height="1706" alt="architecture" src="https://github.com/user-attachments/assets/7bf0ded3-f631-4875-a10b-936dd413beb0" />
+<img width="3090" height="1706" alt="architecture" src="https://github.com/user-attachments/assets/2a07e155-17cd-464d-80b4-e91c35eb85a3" />
 
 ---
 
@@ -48,7 +48,7 @@ src/main/java/com/monk/commerce/task
 
 # 🗂 Database Schema (JOINED Inheritance)
 
-![Schema Diagram](schema.png)
+<img width="3820" height="2503" alt="schema_architecture" src="https://github.com/user-attachments/assets/43c2dd62-2737-4912-80f1-c4ba98d543fa" />
 
 The coupon engine uses **JOINED strategy** to map:
 
