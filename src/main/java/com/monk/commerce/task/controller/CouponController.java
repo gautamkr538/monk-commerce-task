@@ -26,13 +26,13 @@ public class CouponController {
         this.couponService = couponService;
     }
 
-    @PostMapping
+    @PostMapping("/create")
     @Operation(summary = "Create a new coupon")
     public ResponseEntity<CouponResponseDTO> createCoupon(@Valid @RequestBody CouponRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(couponService.createCoupon(request));
     }
 
-    @GetMapping
+    @GetMapping("/available")
     @Operation(summary = "Get all coupons")
     public ResponseEntity<List<CouponResponseDTO>> getAllCoupons() {
         return ResponseEntity.ok(couponService.getAllCoupons());
