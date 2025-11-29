@@ -239,10 +239,10 @@ Apply multiple eligible coupons at once:
 - Loyalty tier coupons
 
 #### 4. Category & Brand Based Coupons
-Requires product catalog integration
+- Requires product catalog integration
 
 #### 5. Inventory-Dependent Coupons
-(Stock-based limits)
+- Stock-based limits
 
 #### 6. Mapping Optimization (Dozer/MapStruct)
 We can eliminate mapping boilerplate using:
