@@ -1,11 +1,11 @@
-# Monk Commerce – Coupon Management API's
+# Monk Commerce – Coupon Management API
 
 A production-ready and extensible **Coupon Management Engine** designed to support multiple discount models, including **Cart-Wise**, **Product-Wise**, and **BxGy (“Buy X Get Y”)** offers. The implementation addresses real-world business requirements such as global and per-user usage limits, coupon prioritization, stacking rules, excluded product handling, tiered BxGy configurations, and comprehensive validation.
 
 Developed using modern **Java and Spring Boot** practices, the system emphasizes clean architecture, scalability, maintainability, and adherence to key engineering principles such as the **Strategy Pattern**, **Open/Closed Principle**, and a well-structured layered architecture.
 
 **Technology Stack:**  
-**Java 21 · Spring Boot 3 · PostgreSQL · Hibernate/JPA · Swagger/OpenAPI · Lombok · Jakarta Validation · Maven**.
+**Java 21 · Spring Boot 3 · PostgreSQL · Hibernate/JPA · Swagger/OpenAPI · Lombok · Jakarta Validation · Maven**
 
 ---
 
@@ -80,8 +80,6 @@ The full PostgreSQL schema used by the coupon engine: **[View Schema.sql](https:
 ---
 
 ## 2. Usage Tracking & Limits
-Fully implemented:
-
 - Global usage limit (`max_usage_limit`)
 - Per-user usage limit (`usage_limit_per_user`)
 - Track total usage & user-specific usage
@@ -205,9 +203,9 @@ All endpoints, payloads, and responses can be tested directly in-browser.
 
 ---
 
-# Scenario Coverage (Detailed Matrix)
+# Scenario Coverage Postman Collection
 
-The full **scenario coverage table** (100+ scenarios) is included inside this README below.
+A complete Postman collection is included for testing all coupon **scenario coverage**: **[View Postman Collection](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/postman_collection.json)**
 
 ---
 
@@ -257,9 +255,3 @@ We can eliminate mapping boilerplate using:
 - Or a custom **DozerUtil**
 
 This will make DTO ↔ Entity mapping maintainable & cleaner.
-
----
-
-# Postman Collection
-
-A complete Postman collection is included for testing all coupon scenarios: **[View Postman Collection](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/postman_collection.json)**
