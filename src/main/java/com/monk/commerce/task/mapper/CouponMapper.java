@@ -40,6 +40,21 @@ public class CouponMapper {
             default -> throw new InvalidCouponException("Unsupported coupon type: " + dto.getType());
         };
 
+        // Set usage limits and priority
+        if (dto.getMaxUsageLimit() != null) {
+            coupon.setMaxUsageLimit(dto.getMaxUsageLimit());
+        }
+        if (dto.getUsageLimitPerUser() != null) {
+            coupon.setUsageLimitPerUser(dto.getUsageLimitPerUser());
+        }
+        if (dto.getAllowStacking() != null) {
+            coupon.setAllowStacking(dto.getAllowStacking());
+        }
+        if (dto.getPriority() != null) {
+            coupon.setPriority(dto.getPriority());
+        }
+
+        // Set excluded products
         if (dto.getExcludedProducts() != null && !dto.getExcludedProducts().isEmpty()) {
             List<ExcludedProduct> excludedProducts = dto.getExcludedProducts().stream()
                     .map(productId -> ExcludedProduct.builder()
@@ -224,7 +239,19 @@ public class CouponMapper {
         if (dto.getExpirationDate() != null) {
             existingCoupon.setExpirationDate(dto.getExpirationDate());
         }
-
+        if (dto.getMaxUsageLimit() != null) {
+            existingCoupon.setMaxUsageLimit(dto.getMaxUsageLimit());
+        }
+        if (dto.getUsageLimitPerUser() != null) {
+            existingCoupon.setUsageLimitPerUser(dto.getUsageLimitPerUser());
+        }
+        if (dto.getAllowStacking() != null) {
+            existingCoupon.setAllowStacking(dto.getAllowStacking());
+        }
+        if (dto.getPriority() != null) {
+            existingCoupon.setPriority(dto.getPriority());
+        }
+        // Update excluded products
         if (dto.getExcludedProducts() != null) {
             existingCoupon.getExcludedProducts().clear();
             if (!dto.getExcludedProducts().isEmpty()) {
@@ -233,7 +260,7 @@ public class CouponMapper {
                                 .coupon(existingCoupon)
                                 .productId(productId)
                                 .build())
-                        .toList();
+                        .collect(Collectors.toList());
                 existingCoupon.getExcludedProducts().addAll(excludedProducts);
             }
         }
