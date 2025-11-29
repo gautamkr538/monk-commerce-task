@@ -9,7 +9,7 @@ Technology Stack: **Java 21**, **Spring Boot 3**, **PostgreSQL**, **Hibernate**,
 # 🖼 Architecture Diagram
 (Architecture PNG available in repository)
 
-![img_3.png](img_3.png)
+<img width="2345" height="1706" alt="architecture" src="https://github.com/user-attachments/assets/7bf0ded3-f631-4875-a10b-936dd413beb0" />
 
 ---
 
