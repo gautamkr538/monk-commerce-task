@@ -1,8 +1,12 @@
 # Monk Commerce – Coupon Management API's
 
-A backend assignment implementing a fully extensible **Coupon Engine** supporting **Cart-Wise**, **Product-Wise**, and **BxGy (“Buy X Get Y”)** discounts with real-world scenarios like usage limits, priority system, stacking flags, excluded products, tiered BxGy, and more.
+A production-ready and extensible **Coupon Management Engine** designed to support multiple discount models, including **Cart-Wise**, **Product-Wise**, and **BxGy (“Buy X Get Y”)** offers.  
+The implementation addresses real-world business requirements such as global and per-user usage limits, coupon prioritization, stacking rules, excluded product handling, tiered BxGy configurations, and comprehensive validation.
 
-Technology Stack: **Java 21**, **Spring Boot 3**, **PostgreSQL**, **Hibernate**, **Swagger**, **Lombok**, **Jakarta Validation**, **Maven**.
+Developed using modern **Java and Spring Boot** practices, the system emphasizes clean architecture, scalability, maintainability, and adherence to key engineering principles such as the **Strategy Pattern**, **Open/Closed Principle**, and a well-structured layered architecture.
+
+**Technology Stack:**  
+**Java 21 · Spring Boot 3 · PostgreSQL · Hibernate/JPA · Swagger/OpenAPI · Lombok · Jakarta Validation · Maven**.
 
 ---
 
