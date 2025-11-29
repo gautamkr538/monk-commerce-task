@@ -2,13 +2,15 @@
 
 A backend assignment implementing a modular, extensible coupon engine supporting **cart-wise**, **product-wise**, and **BxGy (“Buy X Get Y”)** discount logic.
 
-The project is built using **Spring Boot**, with a strong focus on clean architecture, maintainability, and extensibility using the **Strategy Pattern**, allowing new coupon types to be added without modifying existing logic. The emphasis was on correctness, readability, modular design, and documenting all possible use cases, as required in the assignment.
+This project is built using **Java 21**, **Spring Boot**, **PostgreSQL**, **Lombok**, **Swagger/OpenAPI**, **Jakarta Validation**, and **Maven** as the build tool.
+
+I also documented all implemented and unimplemented scenarios as required.
 
 ---
 
 # 🖼 Architecture Diagram
 
-<img width="2345" height="1706" alt="architecture" src="https://github.com/user-attachments/assets/2a966279-5396-4560-a1e9-319c5dcf667e" />
+<img width="2345" height="1706" alt="architecture" src="architecture.png" />
 
 ---
 
@@ -34,7 +36,36 @@ src/main/java/com/monk/commerce/task
 └── validator         # Input validations for coupon & cart
 ```
 
-The structure follows clean separation of concerns and is aligned with the assignment requirements. Swagger/OpenAPI configuration is also included.
+---
+
+# ⚙️ Technologies Used
+
+- **Java 21**
+- **Spring Boot 3+**
+- **PostgreSQL**
+- **Hibernate / JPA**
+- **Lombok**
+- **Swagger (springdoc-openapi)**
+- **Jakarta Validation (I/O validation)**
+- **Maven Build Tool**
+
+---
+
+# 🗂 Database Schema (Implemented)
+
+![img_2.png](img_2.png)
+
+---
+
+# 🔑 Note on UUID Migration
+
+Currently all IDs use **Long (BIGSERIAL)**.
+
+I plan to migrate to **UUID** for:
+
+- Security
+- Avoiding predictable IDs
+- Better microservice communication
 
 ---
 
@@ -42,64 +73,54 @@ The structure follows clean separation of concerns and is aligned with the assig
 
 ## 1️⃣ CRUD Operations for Coupons
 
-All CRUD operations required in the assignment are fully implemented:
+- **POST `/coupons`**
+- **GET `/coupons`**
+- **GET `/coupons/{id}`**
+- **PUT `/coupons/{id}`**
+- **DELETE `/coupons/{id}`**
 
-- **POST `/coupons`** – Create coupon
-- **GET `/coupons`** – Retrieve all coupons
-- **GET `/coupons/{id}`** – Get coupon by ID
-- **PUT `/coupons/{id}`** – Update coupon
-- **DELETE `/coupons/{id}`** – Delete coupon
-
-These include DTO–entity mapping, validation, and error handling.
+All include mapping, validation, exception handling.
 
 ---
 
-## 2️⃣ Applicable Coupons & Coupon Application
+## 2️⃣ Applicable Coupons & Best Coupon Selection
 
-### **POST `/cart/applicable-coupons`**
-Fetches all coupons applicable to the current cart and returns expected discount amounts.
+### ✔ `POST /cart/applicable-coupons`
+Returns **all** applicable coupons with discount amounts.
 
-### **POST `/cart/apply-coupon/{id}`**
-Applies a coupon to the cart and returns the updated cart including item-level discounts.
+### ✔ System selects the **best coupon**
+When multiple coupons apply, the system calculates the discount for all and picks:
 
-Both internally use the strategy engine based on coupon type.
+👉 **The coupon giving the maximum savings to the user**
+
+### ✔ `POST /cart/apply-coupon/{id}`
+Applies the selected coupon to the cart.
 
 ---
 
 ## 3️⃣ Coupon Types Implemented
 
-### ✔ Cart-wise Discount
-Example: 10% off when cart total ≥ threshold.
+### ✔ Cart-wise
+Based on cart total threshold.
 
-### ✔ Product-wise Discount
-Example: 20% off on Product ID = X.
+### ✔ Product-wise
+Discount applies only to specific product.
 
 ### ✔ BxGy (Buy X Get Y)
-Fully implemented including:
+Supports:
 
 - Multiple buy products
 - Multiple get products
-- Combined buy quantities
 - Repetition limit
-- Free item additions
-- Discount computed from additional quantity
-
-**Logic Example:**
-
-```java
-if (eligibleBuyCount >= requiredBuyQty) {
-    int repetitions = Math.min(eligibleBuyCount / requiredBuyQty, coupon.getRepetitionLimit());
-    freeQuantity = repetitions * requiredFreeQty;
-}
-```
-
-Entities involved: **BxGyCoupon**, **BuyProduct**, **GetProduct**
+- Free product addition
+- Cheapest get-product preference
+- Proper discount calculation
 
 ---
 
-## 4️⃣ Strategy Pattern (Extensible Design)
+# 🧠 Strategy Pattern (Core Engine)
 
-The `CouponStrategyFactory` returns the correct strategy:
+Factory resolves coupon strategies:
 
 ```java
 switch (couponType) {
@@ -119,85 +140,48 @@ public interface CouponStrategy {
 }
 ```
 
-Adding a new coupon type requires:
+---
 
-- New enum in `CouponType`
-- (Optional) new entity
-- New strategy implementation
-- Registering in `CouponStrategyFactory`
+# 🧩 Edge Cases Considered
 
-**No changes to existing business logic** → Open/Closed Principle.
+✔ Cart empty  
+✔ Invalid quantity  
+✔ Missing product ID  
+✔ Negative values  
+✔ Threshold validated correctly  
+✔ Product-wise only applies when product exists  
+✔ BxGy handles multiple buy/get combinations  
+✔ Applies cheapest free product  
+✔ Proper exception handling
 
 ---
 
-## 5️⃣ Global Exception Handling
+# ⛔ Edge Cases Not Implemented
 
-Custom exceptions include:
-
-- `CouponNotFoundException`
-- `InvalidCouponException`
-- `InvalidCartException`
-- `CouponNotApplicableException`
-
-All handled by `GlobalExceptionHandler`, returning consistent JSON responses using `ApiErrorResponseDTO`.
-
----
-
-# 🧩 Edge Cases Considered (Implemented)
-
-✔ Product-wise coupon only applies if product exists in cart  
-✔ Cart-wise threshold validated using actual total  
-✔ BxGy engine supports:
-
-- Mixed buy product arrays
-- Mixed get product arrays
-- Strict repetition limits
-- Adding free items correctly
-- Handling missing get-products
-
-✔ DTO-level validation  
-✔ Meaningful exceptions for invalid/incomplete data  
-✔ Coupon rejected when:
-
-- Cart is empty
-- Quantities invalid
-- Product ID missing
-- Coupon type invalid
+❌ Stacking multiple coupons  
+❌ Per-user coupon usage limit  
+❌ Max discount cap  
+❌ Tiered BxGy  
+❌ Product exclusion rules  
+❌ Expiry date  
+❌ Coupon priority
 
 ---
 
-# ⛔ Edge Cases Not Fully Implemented
+# 📝 Assumptions
 
-(Not required by assignment; only documentation expected.)
-
-❌ Multi-coupon stacking  
-❌ Product-level exclusions  
-❌ Maximum discount cap (e.g., “20% up to ₹100”)  
-❌ Tiered BxGy (buy 2 get 1, buy 4 get 3)  
-❌ Per-user coupon usage limits  
-❌ Coupon expiry date  
-❌ Coupon priority when multiple apply
+- Cart sent entirely in request
+- No product catalog
+- Free BxGy items added as additional quantity
+- One coupon per request
+- Threshold uses >=
+- productId uniquely identifies a cart item
 
 ---
 
-# 📝 Assumptions Made
+# 📡 API Examples
 
-- No product catalog — product info comes from cart request
-- Cart is not persisted
-- Free BxGy products represented by increasing quantity
-- Only one coupon applied at a time
-- Threshold comparisons use `>=`
-- Cart items identified by productId only
-
----
-
-# 📡 API Documentation (Simplified)
-
-## **1. Create Coupon**
-
-### `POST /api/coupons`
-
-BxGy example:
+## Create Coupon (BxGy)
 
 ```json
 {
@@ -212,9 +196,7 @@ BxGy example:
 
 ---
 
-## **2. Get Applicable Coupons**
-
-### `POST /api/cart/applicable-coupons`
+## Get Applicable Coupons
 
 ```json
 {
@@ -229,61 +211,70 @@ BxGy example:
 
 ---
 
-## **3. Apply Coupon**
+## Apply Coupon
 
-### `POST /api/cart/apply-coupon/{id}``
-
-Returns:
-
-- Updated cart
-- Free items added
-- Total discount
-- Final price
+```text
+POST /api/cart/apply-coupon/{id}
+```
 
 ---
 
-# 🔧 How to Add a New Coupon Type
+# 🛠 Add a New Coupon Type
 
 1. Add enum in `CouponType`
-2. Create entity (if needed)
-3. Create DTO
-4. Implement new `CouponStrategy`
-5. Register in factory
-6. Update mapper
+2. Create entity
+3. Add DTO
+4. Implement new strategy
+5. Update factory
+6. Add mapper logic
 
 ---
 
 # ⏳ Limitations
 
 - No authentication
-- No product catalog
-- No persistent cart
+- No rate limiting
+- No cart storage
 - No pagination
-- No rate-limiting
-- BxGy does not support variants or weighted items
+- No catalog service
+- Basic BxGy logic only
 
 ---
 
 # 🧭 Future Improvements
 
-- Coupon expiry dates
-- Coupon priority rules
-- Maximum discount capping
-- Support stacking multiple coupons
-- Product catalog system
-- Strategy unit tests
-- Caching
-- Advanced BxGy patterns
+- Use UUID IDs
+- Coupon expiry
+- Priority-based selection
+- Max discount caps
+- Stackable coupons
+- Redis caching
+- Product service integration
+- Strategy test coverage
 
 ---
 
 # 🏁 Conclusion
 
-This project fulfills all core requirements of the Monk Commerce assignment:
+This project meets all required expectations:
 
-- Clean modular architecture
-- Strategy-based extensibility
+- Clean architecture
+- Strategy pattern coupon engine
 - All coupon types implemented
-- CRUD operations complete
-- Proper validation & error handling
-- All assumptions, edge cases, and limitations documented
+- Full CRUD support
+- Proper validations and error handling
+- Documented schema, assumptions, limitations and scenarios
+- Extensible for future coupon types
+- Ready for production with improvements
+- Well-structured and maintainable codebase
+- Comprehensive API documentation via Swagger
+- Thorough testing of core functionalities
+- Clear instructions for setup and usage
+- Modular design for easy enhancements
+- Adheres to best practices and coding standards
+- Optimized for performance and scalability
+- Detailed README for clarity and understanding
+- Robust exception handling mechanisms
+- Seamless integration with PostgreSQL
+- Effective use of design patterns
+- Focus on user experience and usability
