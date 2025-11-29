@@ -20,13 +20,12 @@ public class ProductWiseDetailsDTO {
 
     // Used JsonProperty to match the expected JSON field names with underscores
     // Added validation annotations to ensure data integrity
+
     // Product ID must not be null
-    // Discount percentage must be between 0 and 100
-    
     @NotNull(message = Constants.PRODUCT_ID_REQUIRED)
     @JsonProperty("product_id")
     private Long productId;
-    
+    // Discount percentage must be between 0 and 100
     @DecimalMin(value = "0.0", message = "Discount must be at least 0")
     @DecimalMax(value = "100.0", message = "Discount percentage cannot exceed 100")
     @JsonProperty("discount")

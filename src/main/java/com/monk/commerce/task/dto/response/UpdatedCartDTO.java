@@ -17,18 +17,14 @@ public class UpdatedCartDTO {
 
     // List of items in the cart
     // Each item includes product ID, quantity, price, and total discount
-    // Total price of all items before discounts
-    // Total discount applied to the cart
-    // Final price after applying discounts
-
     private List<CartItemResponseDTO> items;
-    
+    // Total price of all items before discounts
     @JsonProperty("total_price")
     private BigDecimal totalPrice;
-    
+    // Total discount applied to the cart
     @JsonProperty("total_discount")
     private BigDecimal totalDiscount;
-    
+    // Final price after applying discounts
     @JsonProperty("final_price")
     private BigDecimal finalPrice;
 }
