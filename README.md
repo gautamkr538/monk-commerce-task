@@ -8,7 +8,7 @@ The project is built using **Spring Boot**, with a strong focus on clean archite
 
 # 🖼 Architecture Diagram
 
-![img_1.png](img_1.png)
+<img width="2345" height="1706" alt="architecture" src="https://github.com/user-attachments/assets/2a966279-5396-4560-a1e9-319c5dcf667e" />
 
 ---
 
