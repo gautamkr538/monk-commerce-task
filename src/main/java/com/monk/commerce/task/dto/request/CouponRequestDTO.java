@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Builder
@@ -33,4 +34,7 @@ public class CouponRequestDTO {
     private LocalDateTime expirationDate;
 
     private Object details;
+
+    @JsonProperty("excluded_products")
+    private List<Long> excludedProducts;
 }

@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 @Data
@@ -47,6 +48,9 @@ public class CouponResponseDTO {
     private Integer priority;
 
     private Object details;
+
+    @JsonProperty("excluded_products")
+    private List<Long> excludedProducts;
 
     @JsonProperty("created_at")
     private LocalDateTime createdAt;

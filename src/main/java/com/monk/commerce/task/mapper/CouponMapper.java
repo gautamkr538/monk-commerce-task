@@ -7,12 +7,7 @@ import com.monk.commerce.task.dto.request.CartWiseDetailsDTO;
 import com.monk.commerce.task.dto.request.CouponRequestDTO;
 import com.monk.commerce.task.dto.request.ProductWiseDetailsDTO;
 import com.monk.commerce.task.dto.response.CouponResponseDTO;
-import com.monk.commerce.task.entity.BuyProduct;
-import com.monk.commerce.task.entity.BxGyCoupon;
-import com.monk.commerce.task.entity.CartWiseCoupon;
-import com.monk.commerce.task.entity.Coupon;
-import com.monk.commerce.task.entity.GetProduct;
-import com.monk.commerce.task.entity.ProductWiseCoupon;
+import com.monk.commerce.task.entity.*;
 import com.monk.commerce.task.enums.CouponType;
 import com.monk.commerce.task.exception.InvalidCouponException;
 import com.monk.commerce.task.util.CouponUtil;
@@ -36,14 +31,25 @@ public class CouponMapper {
     public Coupon toEntity(CouponRequestDTO dto) {
         Objects.requireNonNull(dto, "CouponRequestDTO cannot be null");
         Objects.requireNonNull(dto.getType(), "Coupon type cannot be null");
-        CouponType couponType = CouponType.fromValue(dto.getType());
 
-        return switch (couponType) {
+        CouponType couponType = CouponType.fromValue(dto.getType());
+        Coupon coupon = switch (couponType) {
             case CART_WISE -> toCartWiseCoupon(dto);
             case PRODUCT_WISE -> toProductWiseCoupon(dto);
             case BXGY -> toBxGyCoupon(dto);
             default -> throw new InvalidCouponException("Unsupported coupon type: " + dto.getType());
         };
+
+        if (dto.getExcludedProducts() != null && !dto.getExcludedProducts().isEmpty()) {
+            List<ExcludedProduct> excludedProducts = dto.getExcludedProducts().stream()
+                    .map(productId -> ExcludedProduct.builder()
+                            .coupon(coupon)
+                            .productId(productId)
+                            .build())
+                    .collect(Collectors.toList());
+            coupon.setExcludedProducts(excludedProducts);
+        }
+        return coupon;
     }
 
     private CartWiseCoupon toCartWiseCoupon(CouponRequestDTO dto) {
@@ -131,6 +137,13 @@ public class CouponMapper {
     public CouponResponseDTO toResponseDTO(Coupon coupon) {
         Objects.requireNonNull(coupon, "Coupon cannot be null");
 
+        List<Long> excludedProductIds = null;
+        if (coupon.getExcludedProducts() != null && !coupon.getExcludedProducts().isEmpty()) {
+            excludedProductIds = coupon.getExcludedProducts().stream()
+                    .map(ExcludedProduct::getProductId)
+                    .collect(Collectors.toList());
+        }
+
         return CouponResponseDTO.builder()
                 .id(coupon.getId())
                 .couponCode(coupon.getCouponCode())
@@ -144,6 +157,7 @@ public class CouponMapper {
                 .allowStacking(coupon.getAllowStacking())
                 .priority(coupon.getPriority())
                 .details(mapCouponDetails(coupon))
+                .excludedProducts(excludedProductIds) // ADD THIS
                 .createdAt(coupon.getCreatedAt())
                 .updatedAt(coupon.getUpdatedAt())
                 .build();
@@ -209,6 +223,19 @@ public class CouponMapper {
         }
         if (dto.getExpirationDate() != null) {
             existingCoupon.setExpirationDate(dto.getExpirationDate());
+        }
+
+        if (dto.getExcludedProducts() != null) {
+            existingCoupon.getExcludedProducts().clear();
+            if (!dto.getExcludedProducts().isEmpty()) {
+                List<ExcludedProduct> excludedProducts = dto.getExcludedProducts().stream()
+                        .map(productId -> ExcludedProduct.builder()
+                                .coupon(existingCoupon)
+                                .productId(productId)
+                                .build())
+                        .toList();
+                existingCoupon.getExcludedProducts().addAll(excludedProducts);
+            }
         }
 
         if (dto.getDetails() != null) {
