@@ -196,13 +196,13 @@ Ensures OCP (Open-Closed Principle) → new coupon types require **zero modifica
 
 Swagger UI is auto-generated at:
 
-👉 **http://localhost:8080/monk/swagger-ui/index.html#/**
+- **http://localhost:8080/monk/swagger-ui/index.html#/**
 
 All endpoints, payloads, and responses can be tested directly in-browser.
 
 ---
 
-# 📊 Scenario Coverage (Detailed Matrix)
+# Scenario Coverage (Detailed Matrix)
 
 The full **scenario coverage table** (100+ scenarios) is included inside this README below.
 
