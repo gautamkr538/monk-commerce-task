@@ -65,16 +65,16 @@ Indexes added for performance and optimized search.
 
 ---
 
-# 🚀 Features Implemented (Production-Level)
+# Features Implemented
 
-## ✅ 1. Core Coupon Types
+## 1. Core Coupon Types
 - **Cart-Wise** (threshold + discount + max cap)
 - **Product-Wise** (specific product discount + max per product cap)
 - **BxGy** (multi-buy, multi-get, repetition limit, tier support)
 
 ---
 
-## ✅ 2. Usage Tracking & Limits
+## 2. Usage Tracking & Limits
 Fully implemented:
 
 - Global usage limit (`max_usage_limit`)
@@ -84,7 +84,7 @@ Fully implemented:
 
 ---
 
-## ✅ 3. Priority System
+## 3. Priority System
 - Each coupon has a **priority (0–N)**
 - Applicable coupons sorted by priority **DESC**
 - Higher priority coupons shown first
@@ -92,7 +92,7 @@ Fully implemented:
 
 ---
 
-## ✅ 4. Stacking (Metadata Level)
+## 4. Stacking (Metadata Level)
 - `is_stackable` boolean flag implemented
 - Returned in API responses
 - Controls future stacking rules  
@@ -100,14 +100,14 @@ Fully implemented:
 
 ---
 
-## ✅ 5. Excluded Products
+## 5. Excluded Products
 - Configurable excluded product list
 - Coupon is rejected if excluded product appears in cart
 - Ensures realistic exclusion logic (premium items, special SKUs)
 
 ---
 
-## ✅ 6. Tiered BxGy (Multi-Level Buy X Get Y)
+## 6. Tiered BxGy (Multi-Level Buy X Get Y)
 - Supports **tier_level 1, 2, 3...**
 - Auto-detect best applicable tier
 - Repetition limit enforced
@@ -116,7 +116,7 @@ Fully implemented:
 
 ---
 
-## ✅ 7. Discount Calculation Engine
+## 7. Discount Calculation Engine
 Built with Strategy Pattern:
 
 - Percentage discounts
@@ -129,7 +129,7 @@ Built with Strategy Pattern:
 
 ---
 
-## ✅ 8. Validation & Error Handling
+## 8. Validation & Error Handling
 Handled through validators + exception handler:
 
 - Empty cart
@@ -146,7 +146,7 @@ All mapped to uniform error response DTO.
 
 ---
 
-## ✅ 9. CRUD Operations
+## 9. CRUD Operations
 - Create Coupon (auto-generate coupon code if not provided)
 - Get all active coupons
 - Get coupon by ID
@@ -155,7 +155,7 @@ All mapped to uniform error response DTO.
 
 ---
 
-## ✅ 10. Cart Operations
+## 10. Cart Operations
 - Fetch applicable coupons
 - Apply a coupon to cart
 - Compute final payable amount
@@ -164,7 +164,7 @@ All mapped to uniform error response DTO.
 
 ---
 
-# 🧠 Strategy Pattern (Core Engine)
+# Strategy Pattern
 
 Each coupon type has its own strategy:
 
@@ -190,7 +190,7 @@ Ensures OCP (Open-Closed Principle) → new coupon types require **zero modifica
 
 ---
 
-# 🧾 API Documentation (via Swagger)
+# API Documentation (via Swagger)
 
 Swagger UI is auto-generated at:
 
@@ -206,11 +206,9 @@ The full **scenario coverage table** (100+ scenarios) is included inside this RE
 
 ---
 
-# 📈 Complete Scenario Coverage Summary
+# Complete Scenario Coverage Summary
 
-(A compressed but detailed version)
-
-### ✅ Fully Implemented Areas
+### Fully Implemented Areas
 1. Cart-wise coupons
 2. Product-wise coupons
 3. BxGy + Tiered BxGy
@@ -224,7 +222,7 @@ The full **scenario coverage table** (100+ scenarios) is included inside this RE
 11. Final price calculation
 12. Strategy-based architecture
 
-### 🔮 Important Future Enhancements
+### Important Future Enhancements
 
 #### 1. Multi-Coupon Stacking Engine
 Apply multiple eligible coupons at once:
@@ -233,16 +231,12 @@ Apply multiple eligible coupons at once:
 - Prevent conflicts with non-stackable coupons
 
 #### 2. Schedule-Based Coupons
-- Start date
-- End date
 - Time-of-day restrictions (happy hours)
 - Day-of-week rules
 
 #### 3. User Segmentation
-- VIP-only coupons
 - First-order coupons
 - Loyalty tier coupons
-- Region-specific coupons
 
 #### 4. Category & Brand Based Coupons
 Requires product catalog integration
@@ -250,12 +244,7 @@ Requires product catalog integration
 #### 5. Inventory-Dependent Coupons
 (Stock-based limits)
 
-#### 6. Analytics & Reporting
-- Revenue impact
-- Popularity metrics
-- Export usage
-
-#### 7. Mapping Optimization (Dozer/MapStruct)
+#### 6. Mapping Optimization (Dozer/MapStruct)
 We can eliminate mapping boilerplate using:
 
 - **Dozer**
@@ -266,19 +255,5 @@ This will make DTO ↔ Entity mapping maintainable & cleaner.
 
 ---
 
-# 📬 Postman Collection
+# Postman Collection
 Will be added soon once the shareable link is ready.
-
----
-
-# 🏁 Conclusion
-
-This project implements a robust, real-world **Coupon Engine** with:
-
-- Clean architecture
-- Strategy-based extensibility
-- Rich business features
-- Complete scenario coverage
-- Strong validation & error handling
-
-The codebase is engineered to scale into a production-ready promotional system.
