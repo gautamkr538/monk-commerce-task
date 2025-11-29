@@ -32,7 +32,6 @@ public class BxGyCoupon extends Coupon {
     @Column(name = "is_tiered", nullable = false)
     private Boolean isTiered = false;
 
-    @PrePersist
     protected void onCreate() {
         super.onCreate();
         if (isTiered == null) isTiered = false;
