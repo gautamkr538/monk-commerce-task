@@ -213,7 +213,7 @@ The full **scenario coverage table** (100+ scenarios) is included inside this RE
 
 # Complete Scenario Coverage Summary
 
-### <span style="text-decoration: underline;">Fully Implemented Areas</span>
+### Fully Implemented Areas
 
 1. Cart-wise coupons
 2. Product-wise coupons
@@ -228,7 +228,7 @@ The full **scenario coverage table** (100+ scenarios) is included inside this RE
 11. Final price calculation
 12. Strategy-based architecture
 
-### <u>Important Future Enhancements</u>
+### Important Future Enhancements
 
 #### 1. Multi-Coupon Stacking Engine
 Apply multiple eligible coupons at once:
