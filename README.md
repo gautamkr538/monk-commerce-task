@@ -52,12 +52,14 @@ src/main/java/com/monk/commerce/task
 
 The coupon engine uses **JOINED strategy** to map:
 
-- `coupon` → base table
-- `cart_wise_coupon`
-- `product_wise_coupon`
-- `bxgy_coupon`
-- `buy_product`
-- `get_product`
+- `coupon` → base table  
+- `cart_wise_coupon` → derived table
+- `product_wise_coupon` → derived table
+- `bxgy_coupon` → derived table
+- `buy_product` → child of bxgy_coupon (buy items per tier)  
+- `get_product` → child of bxgy_coupon (free items per tier)  
+- `excluded_product` → products excluded from a coupon
+- `coupon_usage` → tracks usage per user
 
 Indexes added for performance and optimized search.
 
