@@ -70,100 +70,141 @@ The full PostgreSQL schema used by the coupon engine: **[View Schema.sql](https:
 
 ---
 
-# Features Implemented
+## Features Implemented
 
-## 1. Core Coupon Types
+### 1. Core Coupon Types
 - **Cart-Wise** (threshold + discount + max cap)
 - **Product-Wise** (specific product discount + max per product cap)
 - **BxGy** (multi-buy, multi-get, repetition limit, tier support)
 
+**Example – Limited Flash Sale**
+- `max_usage_limit: 100`
+- `usage_limit_per_user: 1`
+- Output: **“45 redeemed, 55 remaining globally”**
+
+**Example – Tiered BxGy**
+Buy 2 A → Get 1 B free  
+Buy 4 A → Get 2 B free  
+`repetition_limit: 2`  
+Output: **“Cart: 8 × A qualifies for 4 × B free”**
+
 ---
 
-## 2. Usage Tracking & Limits
+### 2. Usage Tracking & Limits
 - Global usage limit (`max_usage_limit`)
 - Per-user usage limit (`usage_limit_per_user`)
 - Track total usage & user-specific usage
 - Show remaining uses for both
 
----
-
-## 3. Priority System
-- Each coupon has a **priority (0–N)**
-- Applicable coupons sorted by priority **DESC**
-- Higher priority coupons shown first
-- Combined with discount calculation to identify the **best coupon**
+**Example – Loyalty Reward Coupon**
+- Unlimited global usage  
+- Per-user limit: **5**  
+- Output: **“User has 3 uses remaining”**
 
 ---
 
-## 4. Stacking (Metadata Level)
-- `is_stackable` boolean flag implemented
+### 3. Priority System
+- Each coupon has **priority (0–N)**
+- Coupons sorted by priority (DESC)
+- Highest priority coupon selected
+- Combined with discount calculation for best match
+
+**Example**
+- Coupon A → 10% off (priority: 10)
+- Coupon B → 5% off (priority: 5)
+- System selects **Coupon A**
+
+---
+
+### 4. Stacking (Metadata Level)
+- `is_stackable` flag stored
 - Returned in API responses
-- Controls future stacking rules  
-  (*Full multi-coupon stacking will come in future phase*)
+- Future-ready for multi-coupon stacking
+
+**Example**
+- Coupon A (`is_stackable: true`)
+- Coupon B (`is_stackable: true`)
+- Future system can apply **both simultaneously**
 
 ---
 
-## 5. Excluded Products
-- Configurable excluded product list
-- Coupon is rejected if excluded product appears in cart
-- Ensures realistic exclusion logic (premium items, special SKUs)
+### 5. Excluded Products
+- Configurable exclusion list
+- Coupon automatically rejected if excluded product is in cart
+
+**Example**
+Exclude: `Product X, Product Y`  
+If cart contains X → **coupon invalid**
 
 ---
 
-## 6. Tiered BxGy (Multi-Level Buy X Get Y)
-- Supports **tier_level 1, 2, 3...**
-- Auto-detect best applicable tier
-- Repetition limit enforced
-- Free item calculation optimized
-- Discount calculation based on tier rules
+### 6. Tiered BxGy (Multi-Level Buy X Get Y)
+- Multiple **tier levels**
+- Auto-detect best tier
+- Enforce repetition limit
+- Optimized free item calculation
+
+**Example**
+Cart: **8 × Product A**  
+Tier: Buy 4 A → Get 2 B  
+Applied twice → **4 × Product B free**
 
 ---
 
-## 7. Discount Calculation Engine
-Built with Strategy Pattern:
+### 7. Discount Calculation Engine
+Using **Strategy Pattern**, supports:
+- Percentage-based discounts
+- Max discount caps
+- Per-product discount caps
+- Free item discounts (BxGy)
+- Threshold validation
+- Product presence checks
+- Multi-tier BxGy validation
 
-- Percentage discounts
-- Max-discount caps
-- Per-product discount cap
-- Free item discount logic (BxGy)
-- Cart threshold validations
-- Product presence validations
-- BxGy buy quantity & get quantity validations
+**Example**
+- BxGy → validates buy & get quantity  
+- Cart-wise → validates threshold + cap
 
 ---
 
-## 8. Validation & Error Handling
-Handled through validators + exception handler:
-
+### 8. Validation & Error Handling
+Handled via validators & exception handler:
 - Empty cart
-- Negative values
+- Invalid quantity/price
 - Duplicate products
-- Expired coupon
-- Inactive coupon
-- Invalid ID
-- Below threshold
-- Missing product for product-wise
-- Insufficient buy quantity for BxGy
+- Expired/inactive coupon
+- Invalid coupon ID
+- Threshold not met
+- Product not present (product-wise)
+- Insufficient buy quantity (BxGy)
 
-All mapped to uniform error response DTO.
+**Example**
+- User applies expired coupon → Error  
+- User exceeds usage limit → Error  
 
 ---
 
-## 9. CRUD Operations
-- Create Coupon (auto-generate coupon code if not provided)
-- Get all active coupons
+### 9. CRUD Operations
+- Create coupon (auto-generates code if absent)
+- Retrieve active coupons
 - Get coupon by ID
 - Update coupon
-- Soft delete coupon via `is_active` flag
+- Soft delete (mark `is_active=false`)
+
+**Example**
+Coupon deletion → never hard deleted, only soft-removed
 
 ---
 
-## 10. Cart Operations
+### 10. Cart Operations
 - Fetch applicable coupons
-- Apply a coupon to cart
+- Apply coupon to cart
 - Compute final payable amount
-- Insert free items for BxGy
-- Final response contains per-item + total discount
+- Add free items for BxGy
+- Return detailed discount breakdown
+
+**Example**
+Applied coupon → updated cart + free items + total discount
 
 ---
 
