@@ -296,6 +296,7 @@ This will make DTO ↔ Entity mapping maintainable & cleaner.
 ## Core Assumptions
 
 ```java
+{
 private static final int MAX_CART_ITEMS = 100;
 private static final BigDecimal MAX_ITEM_PRICE = new BigDecimal("1000000");
 private static final int MAX_ITEM_QUANTITY = 1000;
