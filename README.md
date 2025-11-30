@@ -77,16 +77,16 @@ The full PostgreSQL schema used by the coupon engine: **[View Schema.sql](https:
 - **Product-Wise** (specific product discount + max per product cap)
 - **BxGy** (multi-buy, multi-get, repetition limit, tier support)
 
-**Example – Limited Flash Sale**
+**Example: – Limited Flash Sale**
 - `max_usage_limit: 100`
 - `usage_limit_per_user: 1`
 - Output: **“45 redeemed, 55 remaining globally”**
 
-**Example – Tiered BxGy**
-Buy 2 A → Get 1 B free  
-Buy 4 A → Get 2 B free  
-`repetition_limit: 2`  
-Output: **“Cart: 8 × A qualifies for 4 × B free”**
+**Example: – Tiered BxGy**
+- Buy 2 A → Get 1 B free  
+- Buy 4 A → Get 2 B free  
+- `repetition_limit: 2`  
+- Output: **“Cart: 8 × A qualifies for 4 × B free”**
 
 ---
 
@@ -96,7 +96,7 @@ Output: **“Cart: 8 × A qualifies for 4 × B free”**
 - Track total usage & user-specific usage
 - Show remaining uses for both
 
-**Example – Loyalty Reward Coupon**
+**Example: – Loyalty Reward Coupon**
 - Unlimited global usage  
 - Per-user limit: **5**  
 - Output: **“User has 3 uses remaining”**
@@ -109,7 +109,7 @@ Output: **“Cart: 8 × A qualifies for 4 × B free”**
 - Highest priority coupon selected
 - Combined with discount calculation for best match
 
-**Example**
+**Example:**
 - Coupon A → 10% off (priority: 10)
 - Coupon B → 5% off (priority: 5)
 - System selects **Coupon A**
@@ -121,7 +121,7 @@ Output: **“Cart: 8 × A qualifies for 4 × B free”**
 - Returned in API responses
 - Future-ready for multi-coupon stacking
 
-**Example**
+**Example:**
 - Coupon A (`is_stackable: true`)
 - Coupon B (`is_stackable: true`)
 - Future system can apply **both simultaneously**
@@ -132,9 +132,9 @@ Output: **“Cart: 8 × A qualifies for 4 × B free”**
 - Configurable exclusion list
 - Coupon automatically rejected if excluded product is in cart
 
-**Example**
-Exclude: `Product X, Product Y`  
-If cart contains X → **coupon invalid**
+**Example:**
+- Exclude: `Product X, Product Y`  
+- If cart contains X → **coupon invalid**
 
 ---
 
@@ -144,10 +144,10 @@ If cart contains X → **coupon invalid**
 - Enforce repetition limit
 - Optimized free item calculation
 
-**Example**
-Cart: **8 × Product A**  
-Tier: Buy 4 A → Get 2 B  
-Applied twice → **4 × Product B free**
+**Example:**
+- Cart: **8 × Product A**  
+- Tier: Buy 4 A → Get 2 B  
+- Applied twice → **4 × Product B free**
 
 ---
 
@@ -161,7 +161,7 @@ Using **Strategy Pattern**, supports:
 - Product presence checks
 - Multi-tier BxGy validation
 
-**Example**
+**Example:**
 - BxGy → validates buy & get quantity  
 - Cart-wise → validates threshold + cap
 
@@ -178,7 +178,7 @@ Handled via validators & exception handler:
 - Product not present (product-wise)
 - Insufficient buy quantity (BxGy)
 
-**Example**
+**Example:**
 - User applies expired coupon → Error  
 - User exceeds usage limit → Error  
 
@@ -191,8 +191,8 @@ Handled via validators & exception handler:
 - Update coupon
 - Soft delete (mark `is_active=false`)
 
-**Example**
-Coupon deletion → never hard deleted, only soft-removed
+**Example:**
+- Coupon deletion → never hard deleted, only soft-removed
 
 ---
 
@@ -203,8 +203,8 @@ Coupon deletion → never hard deleted, only soft-removed
 - Add free items for BxGy
 - Return detailed discount breakdown
 
-**Example**
-Applied coupon → updated cart + free items + total discount
+**Example:**
+- Applied coupon → updated cart + free items + total discount
 
 ---
 
