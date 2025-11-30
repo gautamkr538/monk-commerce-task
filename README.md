@@ -93,28 +93,22 @@ The full PostgreSQL schema used by the coupon engine: **[View Schema.sql](https:
 ---
 
 ### 2. Usage Tracking & Limits
-- Global usage limit (`max_usage_limit`)
-- Per-user usage limit (`usage_limit_per_user`)
-- Track total usage & user-specific usage
-- Show remaining uses for both
 
-**Example – Loyalty Reward Coupon**
-- Unlimited global usage  
-- Per-user limit: **5**  
-- Output: **“User has 3 uses remaining”**
+| Feature          | Description                   | Example                          |
+|------------------|-------------------------------|----------------------------------|
+| Global Limit     | Max total coupon uses         | 100 uses total                   |
+| Per-User Limit   | Max uses per user             | 1 use per user                   |
+| Remaining Count  | Shows current availability    | 45 redeemed, 55 remaining        |
 
 ---
 
 ### 3. Priority System
-- Each coupon has **priority (0–N)**
-- Coupons sorted by priority (DESC)
-- Highest priority coupon selected
-- Combined with discount calculation for best match
 
-**Example:**
-- Coupon A → 10% off (priority: 10)
-- Coupon B → 5% off (priority: 5)
-- System selects **Coupon A**
+| Feature          | Description             | Result                     |
+|------------------|-------------------------|----------------------------|
+| Priority Levels  | 0–N                     | Higher priority applied     |
+| Sorting          | DESC order              | Highest-benefit coupon first |
+| Example          | Priority 10 vs 5        | Priority 10 wins           |
 
 ---
 
@@ -187,30 +181,35 @@ Handled via validators & exception handler:
 ---
 
 ### 9. CRUD Operations
-- Create coupon (auto-generates code if absent)
-- Retrieve active coupons
-- Get coupon by ID
-- Update coupon
-- Soft delete (mark `is_active=false`)
 
-**Example:**
-- Coupon deletion → never hard deleted, only soft-removed
+| Operation    | Endpoint            | Notes                          |
+|--------------|---------------------|--------------------------------|
+| Create       | POST /coupons       | Auto-generate coupon code      |
+| Get All      | GET /coupons        | Returns only active coupons    |
+| Get One      | GET /coupons/{id}   | Retrieves full coupon details  |
+| Update       | PUT /coupons/{id}   | Updates coupon fields          |
+| Soft Delete  | DELETE /coupons/{id}| Sets is_active = false         |
 
 ---
 
 ### 10. Cart Operations
-- Fetch applicable coupons
-- Apply coupon to cart
-- Compute final payable amount
-- Add free items for BxGy
-- Return detailed discount breakdown
 
-**Example:**
-- Applied coupon → updated cart + free items + total discount
+| Operation            | Description                               |
+|----------------------|-------------------------------------------|
+| Applicable Coupons   | Returns all eligible coupons for the cart |
+| Apply Coupon         | Calculates discount & updates cart        |
+| Free Items           | Injects free items (BxGy) into cart       |
+| Final Amount         | Computes the final payable price          |
 
 ---
 
 # Strategy Pattern
+
+| Strategy               | Handles                    | Class                        |
+|------------------------|----------------------------|-------------------------------|
+| Cart-Wise Strategy     | Threshold & % discount     | CartWiseCouponStrategy        |
+| Product-Wise Strategy  | Product-based discount     | ProductWiseCouponStrategy     |
+| BxGy Strategy          | Buy X Get Y logic          | BxGyCouponStrategy            |
 
 Each coupon type has its own strategy:
 
