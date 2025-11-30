@@ -328,5 +328,5 @@ private static final BigDecimal MAX_CART_TOTAL = new BigDecimal("10000000");
 
 - All test classes for every component in the project have been fully implemented.
 
--View the complete test coverage and execution output here: **[View Test Report](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/test_report.html)**  
+- View the complete test coverage and execution output here: **[View Test Report](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/test_report.html)**  
 
