@@ -33,7 +33,7 @@ import java.util.UUID;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Coupon {
+public class Coupon {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
