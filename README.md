@@ -289,7 +289,7 @@ We can eliminate mapping boilerplate using:
 
 This will make DTO ↔ Entity mapping maintainable & cleaner.
 
-## 📌 Assumptions & Limitations
+## Assumptions & Limitations
 
 ---
 
