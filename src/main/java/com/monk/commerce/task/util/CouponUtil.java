@@ -6,7 +6,6 @@ import com.monk.commerce.task.entity.Coupon;
 import com.monk.commerce.task.entity.CouponUsage;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 public final class CouponUtil {
