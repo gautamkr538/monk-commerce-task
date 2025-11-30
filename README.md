@@ -326,4 +326,4 @@ private static final BigDecimal MAX_CART_TOTAL = new BigDecimal("10000000");
 
 ## Test Coverage & Execution Report
 
-View the full test coverage and execution output: **[View Test Report](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/monk-commerce-test-report/)** 
+View the full test coverage and execution output: **[View Test Report](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/test_report.html)** 
