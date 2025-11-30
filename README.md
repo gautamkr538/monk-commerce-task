@@ -4,9 +4,6 @@ A production-ready and extensible **Coupon Management Engine** designed to suppo
 
 Developed using modern **Java and Spring Boot** practices, the system emphasizes clean architecture, scalability, maintainability, and adherence to key engineering principles such as the **Strategy Pattern**, **Open/Closed Principle**, and a well-structured layered architecture.
 
-**Technology Stack:**  
-**Java 21 · Spring Boot 3 · PostgreSQL · Hibernate/JPA · Swagger/OpenAPI · Lombok · Jakarta Validation · Maven**
-
 ---
 
 # Architecture Diagram
@@ -37,15 +34,17 @@ src/main/java/com/monk/commerce/task
 
 ---
 
-# Technologies Used
+## Technologies Used
 
-- **Java 21**
-- **Spring Boot 3 (REST + DI + Validation)**
-- **PostgreSQL**
-- **Hibernate/JPA with JOINED Inheritance**
-- **Lombok**
-- **Swagger / OpenAPI**
-- **Maven**
+| Technology | Purpose |
+|-----------|----------|
+| Java 21 | Core language |
+| Spring Boot 3 | REST APIs, DI, Validation |
+| PostgreSQL | Database |
+| Hibernate/JPA | ORM & inheritance mapping |
+| Lombok | Boilerplate reduction |
+| Swagger/OpenAPI | API documentation |
+| Maven | Build & dependency management |
 
 ---
 
@@ -73,9 +72,12 @@ The full PostgreSQL schema used by the coupon engine: **[View Schema.sql](https:
 ## Features Implemented
 
 ### 1. Core Coupon Types
-- **Cart-Wise** (threshold + discount + max cap)
-- **Product-Wise** (specific product discount + max per product cap)
-- **BxGy** (multi-buy, multi-get, repetition limit, tier support)
+
+| Type | Description | Example |
+|------|-------------|---------|
+| Cart-Wise | Threshold + % discount | 10% off above ₹500 |
+| Product-Wise | Product-based discount | 5% off Product A |
+| BxGy | Buy X Get Y free | Buy 4 A → Get 2 B |
 
 **Example – Limited Flash Sale**
 - `max_usage_limit: 100`
