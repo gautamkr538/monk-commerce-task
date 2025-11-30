@@ -296,3 +296,58 @@ We can eliminate mapping boilerplate using:
 - Or a custom **DozerUtil**
 
 This will make DTO ↔ Entity mapping maintainable & cleaner.
+
+## 📌 Assumptions & Limitations
+
+---
+
+## Core Assumptions
+
+| Assumption | Rationale |
+|-----------|-----------|
+| **Single coupon per cart during apply phase** | Initial design keeps apply flow simple; stacking handled later in resolver logic |
+| **Cart items remain in-memory during request cycle** | No user session/cart persistence implemented |
+| **Coupons sorted by priority (DESC)** | Ensures highest-benefit coupon is evaluated first |
+| **Excluded products blacklist entire product** | Variant-level exclusion (e.g., SKU-level) not implemented |
+| **Discount cannot exceed cart total** | Hard safety cap to prevent negative payable amounts |
+| **User ID is authenticated & trusted** | No additional validation to prevent cross-user coupon usage |
+| **BxGy tiered logic always gives max benefit** | System automatically selects the highest qualifying tier |
+
+---
+
+## Functional Limitations
+
+| Limitation | Impact |
+|-----------|--------|
+| **No multi-coupon conflict prevention** | Incorrectly marked stackable coupons may get combined in future stacking logic |
+| **No sequential validation for stacking** | Complex order-based stacking scenarios not enforced |
+| **Scheduled activation (`start_date`) not supported** | Coupons become active immediately if `is_active = true` |
+| **No user segmentation (VIP, loyalty tiers)** | All coupons available to all users unless explicitly restricted |
+| **Category-based or brand-based coupons not available** | Coupons apply only to product IDs or entire cart |
+
+---
+
+## Performance Limitations
+
+- **No caching layer (Redis/Memcached)**  
+  → Every coupon check hits the database directly.
+
+- **JOINED inheritance increases join cost**  
+  → Polymorphic queries are heavier than single-table mappings.
+
+- **Soft delete (`is_active`) adds filter overhead**  
+  → Every query requires filtering inactive coupons.
+
+---
+
+## Security Limitations
+
+- **No rate limiting on coupon endpoints**  
+  → System can be abused for brute-force coupon code guessing.
+
+- **User identity trusted without cross-check**  
+  → No validation preventing user impersonation for coupon usage.
+
+- **No audit logs for coupon application**  
+  → Fraud detection, anomaly tracking, and rollback not possible.
+
