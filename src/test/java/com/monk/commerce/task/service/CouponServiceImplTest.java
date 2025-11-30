@@ -81,7 +81,7 @@ class CouponServiceImplTest {
         response = CouponResponseDTO.builder()
                 .id(coupon.getId())
                 .couponCode("TEST123")
-                .type("CART_WISE")
+                .type("cart-wise")
                 .description("Test")
                 .build();
     }
