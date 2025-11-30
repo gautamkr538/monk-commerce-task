@@ -1,0 +1,123 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CouponRequestDTO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.monk.commerce.task.dto.request</a>
+</div>
+
+<h1>Coverage Summary for Class: CouponRequestDTO (com.monk.commerce.task.dto.request)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">CouponRequestDTO</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.monk.commerce.task.dto.request;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonFormat;
+&nbsp;import com.fasterxml.jackson.annotation.JsonProperty;
+&nbsp;import com.monk.commerce.task.util.Constants;
+&nbsp;import jakarta.validation.constraints.Min;
+&nbsp;import jakarta.validation.constraints.NotBlank;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Builder;
+&nbsp;import lombok.Data;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;
+&nbsp;import java.time.LocalDateTime;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Data
+&nbsp;@Builder
+&nbsp;@NoArgsConstructor
+&nbsp;@AllArgsConstructor
+&nbsp;public class CouponRequestDTO {
+&nbsp;
+&nbsp;    @JsonProperty(&quot;coupon_code&quot;)
+&nbsp;    private String couponCode;
+&nbsp;
+&nbsp;    @NotBlank(message = Constants.COUPON_TYPE_REQUIRED)
+&nbsp;    private String type;
+&nbsp;
+&nbsp;    private String description;
+&nbsp;
+&nbsp;    @JsonProperty(&quot;is_active&quot;)
+&nbsp;    private Boolean isActive;
+&nbsp;
+&nbsp;    @JsonProperty(&quot;expiration_date&quot;)
+&nbsp;    @JsonFormat(pattern = &quot;yyyy-MM-dd&#39;T&#39;HH:mm:ss&quot;)
+&nbsp;    private LocalDateTime expirationDate;
+&nbsp;
+&nbsp;    @JsonProperty(&quot;max_usage_limit&quot;)
+&nbsp;    @Min(value = 1, message = &quot;Max usage limit must be at least 1&quot;)
+&nbsp;    private Long maxUsageLimit;
+&nbsp;
+&nbsp;    @JsonProperty(&quot;usage_limit_per_user&quot;)
+&nbsp;    @Min(value = 1, message = &quot;Usage limit per user must be at least 1&quot;)
+&nbsp;    private Integer usageLimitPerUser;
+&nbsp;
+&nbsp;    @JsonProperty(&quot;allow_stacking&quot;)
+&nbsp;    private Boolean allowStacking;
+&nbsp;
+&nbsp;    @Min(value = 0, message = &quot;Priority cannot be negative&quot;)
+&nbsp;    private Integer priority;
+&nbsp;
+&nbsp;    private Object details;
+&nbsp;
+&nbsp;    @JsonProperty(&quot;excluded_products&quot;)
+&nbsp;    private List&lt;Long&gt; excludedProducts;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-30 12:58</div>
+</div>
+</body>
+</html>

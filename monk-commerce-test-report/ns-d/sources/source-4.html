@@ -1,0 +1,103 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > BxGyDetailsDTO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.monk.commerce.task.dto.request</a>
+</div>
+
+<h1>Coverage Summary for Class: BxGyDetailsDTO (com.monk.commerce.task.dto.request)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">BxGyDetailsDTO</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.monk.commerce.task.dto.request;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonProperty;
+&nbsp;import jakarta.validation.Valid;
+&nbsp;import jakarta.validation.constraints.Min;
+&nbsp;import jakarta.validation.constraints.NotEmpty;
+&nbsp;import jakarta.validation.constraints.NotNull;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Builder;
+&nbsp;import lombok.Data;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;
+&nbsp;import java.util.List;
+&nbsp;
+&nbsp;@Data
+&nbsp;@Builder
+&nbsp;@NoArgsConstructor
+&nbsp;@AllArgsConstructor
+&nbsp;public class BxGyDetailsDTO {
+&nbsp;
+&nbsp;    @Valid
+&nbsp;    @NotEmpty(message = &quot;Buy products list cannot be empty&quot;)
+&nbsp;    @JsonProperty(&quot;buy_products&quot;)
+&nbsp;    private List&lt;BxGyProductDTO&gt; buyProducts;
+&nbsp;
+&nbsp;    @Valid
+&nbsp;    @NotEmpty(message = &quot;Get products list cannot be empty&quot;)
+&nbsp;    @JsonProperty(&quot;get_products&quot;)
+&nbsp;    private List&lt;BxGyProductDTO&gt; getProducts;
+&nbsp;
+&nbsp;    @NotNull(message = &quot;Repetition limit is required&quot;)
+&nbsp;    @Min(value = 1, message = &quot;Repetition limit must be at least 1&quot;)
+&nbsp;    @JsonProperty(&quot;repition_limit&quot;)
+&nbsp;    private Integer repetitionLimit;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-30 12:58</div>
+</div>
+</body>
+</html>

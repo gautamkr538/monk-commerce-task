@@ -1,0 +1,101 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > CartWiseDetailsDTO</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">com.monk.commerce.task.dto.request</a>
+</div>
+
+<h1>Coverage Summary for Class: CartWiseDetailsDTO (com.monk.commerce.task.dto.request)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+</tr>
+<tr>
+  <td class="name">CartWiseDetailsDTO</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package com.monk.commerce.task.dto.request;
+&nbsp;
+&nbsp;import com.fasterxml.jackson.annotation.JsonProperty;
+&nbsp;import jakarta.validation.constraints.DecimalMax;
+&nbsp;import jakarta.validation.constraints.DecimalMin;
+&nbsp;import jakarta.validation.constraints.NotNull;
+&nbsp;import lombok.AllArgsConstructor;
+&nbsp;import lombok.Builder;
+&nbsp;import lombok.Data;
+&nbsp;import lombok.NoArgsConstructor;
+&nbsp;
+&nbsp;import java.math.BigDecimal;
+&nbsp;
+&nbsp;@Data
+&nbsp;@Builder
+&nbsp;@NoArgsConstructor
+&nbsp;@AllArgsConstructor
+&nbsp;public class CartWiseDetailsDTO {
+&nbsp;
+&nbsp;    @NotNull(message = &quot;Threshold is required&quot;)
+&nbsp;    @DecimalMin(value = &quot;0.0&quot;, message = &quot;Threshold must be non-negative&quot;)
+&nbsp;    private BigDecimal threshold;
+&nbsp;
+&nbsp;    @NotNull(message = &quot;Discount percentage is required&quot;)
+&nbsp;    @DecimalMin(value = &quot;0.0&quot;, message = &quot;Discount percentage must be at least 0&quot;)
+&nbsp;    @DecimalMax(value = &quot;100.0&quot;, message = &quot;Discount percentage cannot exceed 100&quot;)
+&nbsp;    @JsonProperty(&quot;discount&quot;)
+&nbsp;    private BigDecimal discountPercentage;
+&nbsp;
+&nbsp;    @DecimalMin(value = &quot;0.0&quot;, message = &quot;Maximum discount must be non-negative&quot;)
+&nbsp;    @JsonProperty(&quot;max_discount&quot;)
+&nbsp;    private BigDecimal maxDiscount;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-11-30 12:58</div>
+</div>
+</body>
+</html>
