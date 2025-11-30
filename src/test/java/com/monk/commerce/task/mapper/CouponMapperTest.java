@@ -32,7 +32,7 @@ class CouponMapperTest {
     @Test
     void toEntity_cartWise_correctMapping() {
         CouponRequestDTO dto = new CouponRequestDTO();
-        dto.setType("CART_WISE");
+        dto.setType("cart-wise");
         dto.setCouponCode("C1");
 
         CartWiseDetailsDTO details = new CartWiseDetailsDTO();
@@ -51,7 +51,7 @@ class CouponMapperTest {
     @Test
     void toEntity_productWise_correctMapping() {
         CouponRequestDTO dto = new CouponRequestDTO();
-        dto.setType("PRODUCT_WISE");
+        dto.setType("product-wise");
 
         ProductWiseDetailsDTO details = new ProductWiseDetailsDTO();
         details.setProductId(5L);
@@ -68,7 +68,7 @@ class CouponMapperTest {
     @Test
     void toEntity_bxgy_correctMapping() {
         CouponRequestDTO dto = new CouponRequestDTO();
-        dto.setType("BXGY");
+        dto.setType("bxgy");
 
         BxGyDetailsDTO details = new BxGyDetailsDTO();
         details.setRepetitionLimit(2);
