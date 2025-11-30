@@ -77,12 +77,12 @@ The full PostgreSQL schema used by the coupon engine: **[View Schema.sql](https:
 - **Product-Wise** (specific product discount + max per product cap)
 - **BxGy** (multi-buy, multi-get, repetition limit, tier support)
 
-**Example: – Limited Flash Sale**
+**Example – Limited Flash Sale**
 - `max_usage_limit: 100`
 - `usage_limit_per_user: 1`
 - Output: **“45 redeemed, 55 remaining globally”**
 
-**Example: – Tiered BxGy**
+**Example – Tiered BxGy**
 - Buy 2 A → Get 1 B free  
 - Buy 4 A → Get 2 B free  
 - `repetition_limit: 2`  
@@ -96,7 +96,7 @@ The full PostgreSQL schema used by the coupon engine: **[View Schema.sql](https:
 - Track total usage & user-specific usage
 - Show remaining uses for both
 
-**Example: – Loyalty Reward Coupon**
+**Example – Loyalty Reward Coupon**
 - Unlimited global usage  
 - Per-user limit: **5**  
 - Output: **“User has 3 uses remaining”**
