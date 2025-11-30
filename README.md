@@ -324,3 +324,6 @@ private static final BigDecimal MAX_CART_TOTAL = new BigDecimal("10000000");
 | **No user segmentation (VIP, loyalty tiers)** | All coupons available to all users unless explicitly restricted |
 | **Category-based or brand-based coupons not available** | Coupons apply only to product IDs or entire cart |
 
+## Test Coverage & Execution Report
+
+View the full test coverage and execution output: **[View Test Report](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/monk-commerce-test-report/)** 
