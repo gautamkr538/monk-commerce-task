@@ -190,6 +190,8 @@ Handled via validators & exception handler:
 | Free Items           | Injects free items (BxGy) into cart       |
 | Final Amount         | Computes the final payable price          |
 
+- Applied coupon → updated cart + free items + total discount
+
 ---
 
 # Strategy Pattern
