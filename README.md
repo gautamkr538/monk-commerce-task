@@ -242,7 +242,7 @@ A complete Postman collection is included for testing all coupon **scenario cove
 
 ---
 
-# Complete Scenario Coverage Summary
+# Scenario Coverage & Future Enhancements
 
 ### Fully Implemented Areas
 
