@@ -70,13 +70,8 @@ class CouponUtilTest {
     void hasExcludedProducts_trueIfAnyExcludedInCart() {
         Coupon coupon = new Coupon();
         coupon.setExcludedProducts(List.of(ExcludedProduct.builder().productId(2L).build()));
-
         CartRequestDTO cart = new CartRequestDTO();
-        cart.setItems(List.of(
-                makeItem(1L),
-                makeItem(2L)
-        ));
-
+        cart.setItems(List.of(makeItem(1L), makeItem(2L)));
         assertTrue(CouponUtil.hasExcludedProducts(coupon, cart));
     }
 
@@ -119,10 +114,7 @@ class CouponUtilTest {
                 BuyProduct.builder().tierLevel(1).build(),
                 BuyProduct.builder().tierLevel(3).build()
         ));
-        coupon.setGetProducts(List.of(
-                GetProduct.builder().tierLevel(2).build()
-        ));
-
+        coupon.setGetProducts(List.of(GetProduct.builder().tierLevel(2).build()));
         assertEquals(3, CouponUtil.getMaxTierLevel(coupon));
     }
 }

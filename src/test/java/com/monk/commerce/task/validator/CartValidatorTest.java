@@ -32,10 +32,7 @@ class CartValidatorTest {
 
     @Test
     void validateCartRequest_nullCart_throwsInvalidCartException() {
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartRequest(null)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartRequest(null));
         assertEquals(Constants.INVALID_CART, ex.getMessage());
     }
 
@@ -43,10 +40,7 @@ class CartValidatorTest {
     void validateCartRequest_emptyItems_throwsInvalidCartException() {
         CartRequestDTO request = createRequest(new ArrayList<>());
 
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartRequest(request)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartRequest(request));
         assertEquals(Constants.EMPTY_CART, ex.getMessage());
     }
 
@@ -57,13 +51,8 @@ class CartValidatorTest {
         for (int i = 1; i <= 101; i++) {
             items.add(createItem((long) i, 1, BigDecimal.TEN));
         }
-
         CartRequestDTO request = createRequest(items);
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartRequest(request)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartRequest(request));
         assertTrue(ex.getMessage().contains("Cart cannot contain more than"));
     }
 
@@ -75,10 +64,7 @@ class CartValidatorTest {
 
         CartRequestDTO request = createRequest(items);
 
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartRequest(request)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartRequest(request));
         assertTrue(ex.getMessage().contains("Duplicate product in cart"));
     }
 
@@ -89,49 +75,33 @@ class CartValidatorTest {
         items.add(createItem(2L, 1, BigDecimal.valueOf(200.00)));
 
         CartRequestDTO request = createRequest(items);
-
         assertDoesNotThrow(() -> validator.validateCartRequest(request));
     }
 
     @Test
     void validateCartItem_nullItem_throwsInvalidCartException() {
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartItem(null)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartItem(null));
         assertEquals("Cart item cannot be null", ex.getMessage());
     }
 
     @Test
     void validateCartItem_invalidProductId_throwsInvalidCartException() {
         CartItemDTO item = createItem(0L, 1, BigDecimal.TEN);
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartItem(item)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartItem(item));
         assertEquals("Invalid product ID", ex.getMessage());
     }
 
     @Test
     void validateCartItem_nullQuantity_throwsInvalidCartException() {
         CartItemDTO item = createItem(1L, null, BigDecimal.TEN);
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartItem(item)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartItem(item));
         assertTrue(ex.getMessage().contains("Invalid quantity"));
     }
 
     @Test
     void validateCartItem_zeroQuantity_throwsInvalidCartException() {
         CartItemDTO item = createItem(1L, 0, BigDecimal.TEN);
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartItem(item)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartItem(item));
         assertTrue(ex.getMessage().contains("Invalid quantity"));
     }
 
@@ -139,33 +109,21 @@ class CartValidatorTest {
     void validateCartItem_quantityExceedsMax_throwsInvalidCartException() {
         // MAX_ITEM_QUANTITY = 1000 → use 1001
         CartItemDTO item = createItem(1L, 1001, BigDecimal.TEN);
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartItem(item)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartItem(item));
         assertTrue(ex.getMessage().contains("Quantity exceeds limit"));
     }
 
     @Test
     void validateCartItem_nullPrice_throwsInvalidCartException() {
         CartItemDTO item = createItem(1L, 1, null);
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartItem(item)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartItem(item));
         assertTrue(ex.getMessage().contains("Price cannot be null"));
     }
 
     @Test
     void validateCartItem_negativePrice_throwsInvalidCartException() {
         CartItemDTO item = createItem(1L, 1, BigDecimal.valueOf(-10));
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartItem(item)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartItem(item));
         assertTrue(ex.getMessage().contains("Price cannot be negative"));
     }
 
@@ -173,11 +131,7 @@ class CartValidatorTest {
     void validateCartItem_priceExceedsMax_throwsInvalidCartException() {
         // MAX_ITEM_PRICE = 1_000_000 → use 1_000_001
         CartItemDTO item = createItem(1L, 1, new BigDecimal("1000001"));
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartItem(item)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartItem(item));
         assertTrue(ex.getMessage().contains("Price exceeds limit"));
     }
 
@@ -185,17 +139,13 @@ class CartValidatorTest {
     void validateCartItem_priceWithMoreThanTwoDecimals_throwsInvalidCartException() {
         CartItemDTO item = createItem(1L, 1, new BigDecimal("10.123"));
 
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartItem(item)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartItem(item));
         assertTrue(ex.getMessage().contains("Price can have max 2 decimal places"));
     }
 
     @Test
     void validateCartItem_validItem_doesNotThrow() {
         CartItemDTO item = createItem(1L, 5, new BigDecimal("999999.99"));
-
         assertDoesNotThrow(() -> validator.validateCartItem(item));
     }
 
@@ -203,13 +153,8 @@ class CartValidatorTest {
     void validateCartTotal_negativeTotal_throwsInvalidCartException() {
         List<CartItemDTO> items = new ArrayList<>();
         items.add(createItem(1L, 1, new BigDecimal("-10.00")));
-
         CartRequestDTO request = createRequest(items);
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartTotal(request)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartTotal(request));
         assertEquals("Cart total cannot be negative", ex.getMessage());
     }
 
@@ -221,11 +166,7 @@ class CartValidatorTest {
         items.add(createItem(2L, 1, new BigDecimal("2000000"))); // total = 11_000_000
 
         CartRequestDTO request = createRequest(items);
-
-        InvalidCartException ex = assertThrows(
-                InvalidCartException.class,
-                () -> validator.validateCartTotal(request)
-        );
+        InvalidCartException ex = assertThrows(InvalidCartException.class, () -> validator.validateCartTotal(request));
         assertTrue(ex.getMessage().contains("Cart total exceeds"));
     }
 

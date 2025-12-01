@@ -33,36 +33,24 @@ class CouponValidatorTest {
 
     @Test
     void validateCouponValid_nullCoupon_throwsException() {
-        NullPointerException ex =
-                assertThrows(NullPointerException.class,
-                        () -> validator.validateCouponValid(null));
-
+        NullPointerException ex = assertThrows(NullPointerException.class, () -> validator.validateCouponValid(null));
         assertEquals("Coupon cannot be null", ex.getMessage());
     }
 
     @Test
     void validateCouponValid_couponInactive_throwsException() {
         Coupon coupon = buildCoupon(false);
-
-        InvalidCouponException ex =
-                assertThrows(InvalidCouponException.class,
-                        () -> validator.validateCouponValid(coupon));
-
+        InvalidCouponException ex = assertThrows(InvalidCouponException.class, () -> validator.validateCouponValid(coupon));
         assertEquals(Constants.COUPON_INACTIVE, ex.getMessage());
     }
 
     @Test
     void validateCouponValid_couponExpired_throwsException() {
         Coupon coupon = buildCoupon(true);
-
         try (MockedStatic<CouponUtil> util = mockStatic(CouponUtil.class)) {
             util.when(() -> CouponUtil.isExpired(coupon)).thenReturn(true);
             util.when(() -> CouponUtil.hasReachedMaxUsage(coupon)).thenReturn(false);
-
-            InvalidCouponException ex =
-                    assertThrows(InvalidCouponException.class,
-                            () -> validator.validateCouponValid(coupon));
-
+            InvalidCouponException ex = assertThrows(InvalidCouponException.class, () -> validator.validateCouponValid(coupon));
             assertEquals(Constants.COUPON_EXPIRED, ex.getMessage());
         }
     }
@@ -74,11 +62,7 @@ class CouponValidatorTest {
         try (MockedStatic<CouponUtil> util = mockStatic(CouponUtil.class)) {
             util.when(() -> CouponUtil.isExpired(coupon)).thenReturn(false);
             util.when(() -> CouponUtil.hasReachedMaxUsage(coupon)).thenReturn(true);
-
-            InvalidCouponException ex =
-                    assertThrows(InvalidCouponException.class,
-                            () -> validator.validateCouponValid(coupon));
-
+            InvalidCouponException ex = assertThrows(InvalidCouponException.class, () -> validator.validateCouponValid(coupon));
             assertEquals("Coupon has reached maximum usage limit", ex.getMessage());
         }
     }
@@ -97,9 +81,7 @@ class CouponValidatorTest {
 
     @Test
     void validateCouponId_nullId_throwsException() {
-        InvalidCouponException ex =
-                assertThrows(InvalidCouponException.class,
-                        () -> validator.validateCouponId(null));
+        InvalidCouponException ex = assertThrows(InvalidCouponException.class, () -> validator.validateCouponId(null));
 
         assertEquals("Invalid coupon ID", ex.getMessage());
     }
