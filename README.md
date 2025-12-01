@@ -232,7 +232,9 @@ Swagger UI is auto-generated at:
 
 - **http://localhost:8080/monk/swagger-ui/index.html#/**
 
-All endpoints, payloads, and responses can be tested directly in-browser.
+- All endpoints, payloads, and responses can be tested directly in-browser.
+
+- Here are reference images for each endpoint: **[View API Endpoints](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/all_api_ui.png)**  **[View Create Coupon Endpoint Response](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/create_coupon.png)**  **[View Coupon By ID](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/coupon_by_id_response.png)**  **[View Applicable Coupon Response](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/applicable_coupon_resonse.png)**  **[View Apply Coupon Response](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/apply_coupon_repetation_limit_response.png)**  **[View Update Coupon Response](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/update_coupon_by_id.png)**  **[View Delete Coupon Response](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/soft_delete_coupon_by_id.png)**  **[View Available Coupon Response](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/fetch_applicable_coupons.png)**
 
 ---
 
@@ -328,5 +330,5 @@ private static final BigDecimal MAX_CART_TOTAL = new BigDecimal("10000000");
 
 - All test classes for every component in the project have been fully implemented.
 
-- View the complete test coverage and execution output here: **[View Test Report](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/test_report.html)**  
+- View the complete test coverage and execution output here: **[View Test Report](https://raw.githubusercontent.com/gautamkr538/monk-commerce-task/main/src/main/resources/test_cases_coverage_report.png)**  
 
